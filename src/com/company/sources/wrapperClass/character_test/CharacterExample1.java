@@ -11,7 +11,7 @@ public class CharacterExample1 {
     public static final byte FINAL_QUOTE_PUNCTUATION = 30;
 
     public static void main(String[] args) {
-        // Unicode符号分类代号
+        // ==========Unicode符号分类代号==========START
         System.out.println(Character.UNASSIGNED); // Cn - Other, not assigned
         System.out.println(Character.UPPERCASE_LETTER); // Lu - Letter, uppercase
         System.out.println(Character.LOWERCASE_LETTER); // Ll - Letter, lowercase
@@ -42,8 +42,8 @@ public class CharacterExample1 {
         System.out.println(Character.OTHER_SYMBOL); // So - Symbol, other
         System.out.println(Character.INITIAL_QUOTE_PUNCTUATION); // Pi - Punctuation, initial quote
         System.out.println(Character.FINAL_QUOTE_PUNCTUATION); // Pf - Punctuation, final quote
-        // Unicode符号分类代号
-        // Unicode双向字符类型
+        // ==========Unicode符号分类代号==========END
+        // ==========Unicode双向字符类型==========START
         System.out.println(Character.DIRECTIONALITY_UNDEFINED); // 未定义
         System.out.println(Character.DIRECTIONALITY_LEFT_TO_RIGHT);// Left-to-Right
         System.out.println(Character.DIRECTIONALITY_RIGHT_TO_LEFT);// Right-to-Left
@@ -69,7 +69,7 @@ public class CharacterExample1 {
 //        System.out.println(Character.DIRECTIONALITY_RIGHT_TO_LEFT_ISOLATE);// Right-to-Left Isolate
 //        System.out.println(Character.DIRECTIONALITY_FIRST_STRONG_ISOLATE);// First Strong Isolate
 //        System.out.println(Character.DIRECTIONALITY_POP_DIRECTIONAL_ISOLATE);// Pop Directional Isolate
-        // Unicode双向字符类型
+        // ==========Unicode双向字符类型==========END
         // 进制转换约束下限，最小2进制
         System.out.println(Character.MIN_RADIX);
         // 进制转换约束上限，最大36进制，因为10个数字+26个字母的限制
@@ -108,9 +108,163 @@ public class CharacterExample1 {
         // static Character valueOf(char c)
         // 拆箱，将Character对象转为char值
         // char charValue()
+        // ==========判断字符属性==========START
         // true：该字符是字母[Alphabetic]字符
         // static boolean isAlphabetic(int codePoint)
-
+        // true：该字符是表意字符
+        // static boolean isIdeographic(int codePoint)
+        // true：该字符可位于Java标识符起始位置
+        // static boolean isJavaIdentifierStart(char ch)
+        // true：该字符可位于Java标识符起始位置
+        // static boolean isJavaIdentifierStart(int codePoint)
+        // true：该字符可位于Java标识符的非起始部分
+        // static boolean isJavaIdentifierPart(char ch)
+        // true：该字符可位于Java标识符的非起始部分
+        // static boolean isJavaIdentifierPart(int codePoint)
+        // true：该字符可位于Unicode标识符的起始部分
+        // static boolean isUnicodeIdentifierStart(char ch)
+        // true：该字符可位于Unicode标识符的起始部分
+        // static boolean isUnicodeIdentifierStart(int codePoint)
+        // true：该字符可位于Unicode标识符的非起始部分
+        // static boolean isUnicodeIdentifierPart(char ch)
+        // true：该字符可位于Unicode标识符的非起始部分
+        // static boolean isUnicodeIdentifierPart(int codePoint)
+        // true：该字符在标识符内是可忽略的
+        // static boolean isIdentifierIgnorable(char ch)
+        // true：该字符在标识符内是可忽略的
+        // static boolean isIdentifierIgnorable(int codePoint)
+        // true：该字符是小写字符
+        // static boolean isLowerCase(char ch)
+        // true：该字符是小写字符
+        // static boolean isLowerCase(int codePoint)
+        // true：该字符是大写字符
+        // static boolean isUpperCase(char ch)
+        // true：该字符是大写字符
+        // static boolean isUpperCase(int codePoint)
+        // true：该字符是TitleCase
+        // static boolean isTitleCase(char ch)
+        // true：该字符是TitleCase
+        // static boolean isTitleCase(int codePoint)
+        // true：该字符是数字字符
+        // static boolean isDigit(char ch)
+        // true：该字符是数字字符
+        // static boolean isDigit(int codePoint)
+        // true：该字符在Unicode定义
+        // static boolean isDefined(char ch)
+        // true：该字符在Unicode定义
+        // static boolean isDefined(int codePoint)
+        // true：该字符属于字母
+        // static boolean isLetter(char ch)
+        // true：该字符属于字母
+        // static boolean isLetter(int codePoint)
+        // 确定指定的字符是否允许作为Java标识符中的第一个字符。
+        // static boolean isJavaLetter(char ch)
+        // true：该字符属于字母或数字
+        // static boolean isLetterOrDigit(char ch)
+        // true：该字符属于字母或数字
+        // static boolean isLetterOrDigit(int codePoint)
+        // 确定指定字符是否可以是Java标识符的一部分，而不是第一个字符。
+        // static boolean isJavaLetterOrDigit(char ch)
+        // true：该字符是Unicode空格
+        // static boolean isSpaceChar(char ch)
+        // true：该字符是Unicode空格
+        // static boolean isSpaceChar(int codePoint)
+        // true：该字符是Java空白符
+        // static boolean isWhitespace(char ch)
+        // true：该字符是Java空白符
+        // static boolean isWhitespace(int codePoint)
+        // true：该字符是空格
+        // static boolean isSpace(char ch)
+        // true：该字符是ISO控制字符
+        // static boolean isISOControl(char ch)
+        // true：该字符是ISO控制字符
+        // static boolean isISOControl(int codePoint)
+        // true：该字符是镜像字符，如<>[]()
+        // static boolean isMirrored(char ch)
+        // true：该字符是镜像字符，如<>[]()
+        // static boolean isMirrored(int codePoint)
+        // 判断字符属性
+        // 字符属性转换
+        // 转为小写形式
+        // static char toLowerCase(char ch)
+        // 转为小写形式
+        // static int toLowerCase(int codePoint)
+        // 转为大写形式
+        // static char toUpperCase(char ch)
+        // 转为大写形式
+        // static int toUpperCase(int codePoint)
+        // 转为TitleCase形式
+        // static char toTitleCase(char ch)
+        // 转为TitleCase形式
+        // static int toTitleCase(int codePoint)
+        // 转为大写形式（考虑可能出现的扩展字符）
+        // int toUpperCaseEx(int codePoint)
+        // 将字符ch存入字符数组，如果是索引223处的字符ß，需要特殊处理
+        // static char[] toUpperCaseCharArray(int codePoint)
+        // ==========字符属性转换==========END
+        // ==========比较==========START
+        // 比较字符x和字符y，返回x-y的结果
+        // static int compare(char x, char y)
+        // 拿当前字符与参数中的字符做比较，返回值<0代表当前字符小于参数中的字符，以此类推
+        // int compareTo(Character anotherCharacter)
+        // ==========比较==========END
+        // ==========码点/码元==========START
+        // true：codePoint是合法的Unicode编码，其范围是：[0x000000, 0x10FFFF]
+        // static boolean isValidCodePoint(int codePoint)
+        // true：codePoint是基本平面区的码点值[0x0000, 0xFFFF]
+        // static boolean isBmpCodePoint(int codePoint)
+        // true：codePoint是非基本平面区码点值[0x010000, 0x10FFFF]
+        // static boolean isSupplementaryCodePoint(int codePoint)
+        // true：字符ch位于高代理区[U+D800 ~ U+DBFF]
+        // static boolean isHighSurrogate(char ch)
+        // true：字符ch位于低代理区[U+DC00 ~ U+DFFF]
+        // static boolean isLowSurrogate(char ch)
+        // true：字符ch位于Unicode代理区['\uD800', '\uDFFF']
+        // static boolean isSurrogate(char ch)
+        // true：字符high和字符low分别是高低代理区的字符
+        // static boolean isSurrogatePair(char high, char low)
+        // 返回该Unicode符号所占的char的个数
+        // static int charCount(int codePoint)
+        // 高、低代理区的码点值 ---> Unicode符号编码值
+        // static int toCodePoint(char high, char low)
+        // 返回索引index处码元的码点值，如果该码元位于Unicode编码的高代理区，则需返回完整的Unicode编码
+        // static int codePointAt(CharSequence seq, int index)
+        // 返回索引index处码元的码点值，如果该码元位于Unicode编码的高代理区，则需返回完整的Unicode编码
+        // int codePointAtImpl(char[] a, int index, int limit)
+        // 返回索引index处码元的码点值，如果该码元位于Unicode编码的高代理区，则需返回完整的Unicode编码
+        // static int codePointAt(char[] a, int index)
+        // 返回索引index处码元的码点值，如果该码元位于Unicode编码的高代理区，则需返回完整的Unicode编码
+        // static int codePointAt(char[] a, int index, int limit)
+        // 返回索引index-1处码元的码点值，如果该码元位于Unicode编码的低代理区，则需返回完整的Unicode编码
+        // static int codePointBefore(CharSequence seq, int index)
+        // 返回索引index-1处码元的码点值，如果该码元位于Unicode编码的低代理区，则需返回完整的Unicode编码
+        // int codePointBeforeImpl(char[] a, int index, int start)
+        // 返回索引index-1处码元的码点值，如果该码元位于Unicode编码的低代理区，则需返回完整的Unicode编码
+        // static int codePointBefore(char[] a, int index)
+        // 返回索引index-1处码元的码点值，如果该码元位于Unicode编码的低代理区，则需返回完整的Unicode编码
+        // static int codePointBefore(char[] a, int index, int start)
+        // 非基本平面的字符X的码点值 ---> 基本平面高代理区的码点值
+        // static char highSurrogate(int codePoint)
+        // 非基本平面的字符的码点值 ---> 基本平面低代理区的码点值
+        // static char lowSurrogate(int codePoint)
+        // 将非基本平面区的Unicode码点值codePoint拆分为高、低代理区码点值存入dst数组（按大端法存储）
+        // void toSurrogates(int codePoint, char[] dst, int index)
+        // 返回[beginIndex, endIndex)范围内的Unicode符号数量
+        // static int codePointCount(CharSequence seq, int beginIndex, int endIndex)
+        // 返回[offset, offset+count)范围内的Unicode符号数量
+        // static int codePointCount(char[] a, int offset, int count)
+        // 返回[offset, offset+count)范围内的Unicode符号数量
+        // static int codePointCountImpl(char[] a, int offset, int count)
+        // Unicode码点值 ---> char，对于增补平面区码点值，需要拆分成高、低代理单元再存储
+        // static int toChars(int codePoint, char[] dst, int dstIndex)
+        // Unicode码点值 ---> char，对于增补平面区码点值，需要拆分成高、低代理单元再存储
+        // static char[] toChars(int codePoint)
+        // 由Unicode字符区域名称获取对应的码点值，如Character.codePointOf("CJK UNIFIED IDEOGRAPHS 54C8")==0x54c8
+        // static int codePointOf(String name)
+        // 由码点值获取对应的Unicode字符区域名称，如Character.getName(0x54c8)=="CJK UNIFIED IDEOGRAPHS 54C8"
+        // static String getName(int codePoint)
+        // ==========码点/码元==========END
+        
 
     }
 }
