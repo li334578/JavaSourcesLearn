@@ -264,7 +264,99 @@ public class CharacterExample1 {
         // 由码点值获取对应的Unicode字符区域名称，如Character.getName(0x54c8)=="CJK UNIFIED IDEOGRAPHS 54C8"
         // static String getName(int codePoint)
         // ==========码点/码元==========END
-        
+        // 返回从index偏移codePointOffset个Unicode符号后新的索引值，codePointOffset的正负决定了偏移方向
+        // static int offsetByCodePoints(CharSequence seq, int index, int codePointOffset)
+        // 返回index偏移codePointOffset个Unicode符号后新的索引值 codePointOffset的正负决定了偏移方向
+        // 此方法中索引x的活动范围由[index, start+count)给出，而不是传统的[0, length)。
+        // static int offsetByCodePointsImpl(char[] a, int start, int count, int index, int codePointOffset)
+        // 返回index偏移codePointOffset个Unicode符号后新的索引值，具体信息参见#offsetByCodePointsImpl方法
+        // static int offsetByCodePoints(char[] a, int start, int count, int index, int codePointOffset)
+        // 返回字符ch在radix进制中代表的数值
+        // static int digit(char ch, int radix)
+        // 返回码点值为codePoint的Unicode字符在radix进制中代表的数值
+        // static int digit(int codePoint, int radix)
+        // 返回数字digit在radix进制下的字母表示，如forDigit(10, 16)=='a'
+        // static char forDigit(int digit, int radix)
+        // 返回字符ch在进制运算中表示的数值，如输入'3'返回3，输入'A'或'a'返回10
+        // static int getNumericValue(char ch)
+        // 返回码点值为codePoint的Unicode字符在进制运算中表示的数值，如输入'3'返回3，输入'A'或'a'返回10
+        // static int getNumericValue(int codePoint)
+        // ==========字符串化==========START
+        // 转换char ---> String
+        // static String toString(char c)
+        // 转换Unicode符号的codePoint为字节表示，再包装到String返回
+        // static String toString(int codePoint)
+        // ==========字符串化==========END
+        // 获取字符类型
+        // static int getType(char ch)
+        // 获取字符类型，该类型由Unicode国际规范指定，可参见Character类中的"Unicode符号分类代号"
+        // static int getType(int codePoint)
+        // 获取Unicode字符ch的方向属性（文本有不同的书写方向，参见Character类中的"Unicode双向字符类型")
+        // static byte getDirectionality(char ch)
+        // 获取码点值为codePoint的Unicode字符的方向属性（文本有不同的书写方向，参见Character类中的"Unicode双向字符类型")
+        // static byte getDirectionality(int codePoint)
+        // 以字节为单位逆置字节顺序
+        // static char reverseBytes(char ch)
+        // ==========Object==========START
+        // 返回字符value的hash值
+        // static int hashCode(char value)
+        // 返回当前字符的hash值
+        // int hashCode()
+        // 判等
+        // boolean equals(Object obj)
+        // 字符串化
+        // String toString()
+        // ==========Object==========END
+        // 字符缓存，缓存了[0, 127]范围内的char，避免每次包装char都new对象
+        // private static class CharacterCache
+        // Unicode字符区域合辑，不包括Unicode私有保留区域
+        // enum UnicodeScript
+        // private static final int[] scriptStarts
+        // private static final UnicodeScript[] scripts
+        // private static HashMap<String, UnicodeScript> aliases;
+        // 为每种字符集映射一个简写名称
+        // 返回Unicode脚本名称或脚本名称别名的UnicodeScript常量。脚本名称及其别名由Unicode标准确定。
+        // static final UnicodeScript forName(String scriptName)
+        // 返回Unicode代码点codePoint所对应的Unicode脚本枚举常量。
+        // static UnicodeScript of(int codePoint)
+        /*
+         * 此类的实例表示Unicode字符区域的特定子集。
+         * Character类中定义的唯一子集族是Character.UnicodeBlock。
+         * Java API的其他部分可以为其自身目的而定义其他子集。
+         */
+        // static class Subset
+        // Unicode字符区域，包括Unicode私有保留区域。不同类别的符号会划分到不同的Unicode字符区域
+        // static final class UnicodeBlock extends Subset
+        // 别名系统的存在是因为历史原因，有些Unicode字符区域名称不唯一
+        // Unicode字符区域别名系统
+        // Unicode字符集的Unicode编码范围的起始值
+        // private static final int blockStarts[]
+        // 构造方法中，会将字符区域的名称/别名与自身对象关联映射到一起
+        /*
+         * private UnicodeBlock(String idName) {
+         *            super(idName);
+         *            map.put(idName, this);
+         *        }
+         */
+        /*
+         * private UnicodeBlock(String idName, String alias) {
+         *             this(idName);
+         *             map.put(alias, this);
+         *         }
+         */
+        /*
+         * private UnicodeBlock(String idName, String... aliases) {
+         *             this(idName);
+         *             for(String alias : aliases)
+         *                 map.put(alias, this);
+         *         }
+         */
+        // 638  - 预期的元素个数 0.75 - HashMap默认的装填因子
+        // private static Map<String, UnicodeBlock> map = new HashMap<>((int) (638 / 0.75f + 1.0f));
+        // 返回当前Unicode代码点所在的字符区域
+        // static UnicodeBlock of(int codePoint)
+        // 返回该字符区域名称/别名对应的字符区域对象
+        // static final UnicodeBlock forName(String blockName)
 
     }
 }
