@@ -1,4 +1,4 @@
-package com.company.sources.wrapperClass.int_test;
+package com.company.sources.JavaLang.wrapperClass.int_test;
 
 /**
  * @author : LiWenBo

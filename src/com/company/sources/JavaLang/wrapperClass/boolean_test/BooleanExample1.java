@@ -1,4 +1,4 @@
-package com.company.sources.wrapperClass.boolean_test;
+package com.company.sources.JavaLang.wrapperClass.boolean_test;
 
 /**
  * @author : LiWenBo

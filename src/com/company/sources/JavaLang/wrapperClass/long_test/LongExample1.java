@@ -1,4 +1,4 @@
-package com.company.sources.wrapperClass.long_test;
+package com.company.sources.JavaLang.wrapperClass.long_test;
 
 /**
  * @author : LiWenBo

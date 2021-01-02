@@ -1,4 +1,4 @@
-package com.company.sources.wrapperClass.character_test;
+package com.company.sources.JavaLang.wrapperClass.character_test;
 
 /**
  * @author : LiWenBo

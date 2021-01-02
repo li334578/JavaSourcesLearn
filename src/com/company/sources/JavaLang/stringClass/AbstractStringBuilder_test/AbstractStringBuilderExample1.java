@@ -1,4 +1,4 @@
-package com.company.sources.stringClass.AbstractStringBuilder_test;
+package com.company.sources.JavaLang.stringClass.AbstractStringBuilder_test;
 
 /**
  * @author : LiWenBo

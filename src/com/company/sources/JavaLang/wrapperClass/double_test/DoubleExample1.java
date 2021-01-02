@@ -1,4 +1,4 @@
-package com.company.sources.wrapperClass.double_test;
+package com.company.sources.JavaLang.wrapperClass.double_test;
 
 /**
  * @author : LiWenBo

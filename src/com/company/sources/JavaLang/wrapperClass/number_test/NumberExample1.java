@@ -1,4 +1,4 @@
-package com.company.sources.wrapperClass.number_test;
+package com.company.sources.JavaLang.wrapperClass.number_test;
 
 /**
  * @author : LiWenBo

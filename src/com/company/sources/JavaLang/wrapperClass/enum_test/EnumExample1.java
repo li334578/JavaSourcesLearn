@@ -1,4 +1,4 @@
-package com.company.sources.wrapperClass.enum_test;
+package com.company.sources.JavaLang.wrapperClass.enum_test;
 
 /**
  * @author : LiWenBo

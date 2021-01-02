@@ -1,4 +1,4 @@
-package com.company.sources.wrapperClass.float_test;
+package com.company.sources.JavaLang.wrapperClass.float_test;
 
 /**
  * @author : LiWenBo
