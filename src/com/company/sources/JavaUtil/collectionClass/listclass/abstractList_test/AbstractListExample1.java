@@ -1,4 +1,4 @@
-package com.company.sources.JavaUtil.collectionClass.abstractList_test;
+package com.company.sources.JavaUtil.collectionClass.listclass.abstractList_test;
 
 
 /**
