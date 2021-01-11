@@ -2012,12 +2012,12 @@ public class HashMapExample1 {
         // static final int TREEIFY_THRESHOLD = 8;
 
         // 存储过程中取消检测（拆分）存储箱的存储箱计数阈值调整大小操作。
-        // 应小于TREEIFY\u阈值，并且多数6目筛下用收缩检测去除。
+        // 应小于TREEIFY阈值，并且多数6目筛下用收缩检测去除。
         // static final int UNTREEIFY_THRESHOLD = 6;
 
         // 最小的桌子容量，箱子可以被树化。
         // （否则，如果bin中的节点太多，则会调整表的大小。）
-        // 应至少为4*TREEIFY\u阈值以避免冲突
+        // 应至少为4*TREEIFY阈值以避免冲突
         // 在调整大小和树化阈值之间。
         // static final int MIN_TREEIFY_CAPACITY = 64;
     }
