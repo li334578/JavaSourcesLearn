@@ -2,6 +2,7 @@ package com.company.sources.functionalInterface;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
@@ -25,6 +26,11 @@ public class Example3 {
         people.stream().filter(Predicate.isEqual("zhangsan")).forEach(System.out::println);
         System.out.println("---------------");
         list1.stream().filter(Predicate.isEqual(1)).forEach(System.out::println);
+
+        Person person_a = new Person("haha",1);
+        Person person_b = new Person("haha",1);
+        System.out.println(person_a.equals(person_b)); // false
+        System.out.println(Objects.equals(person_a,person_b)); // false
     }
 
 
