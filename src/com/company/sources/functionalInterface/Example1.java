@@ -1,6 +1,5 @@
 package com.company.sources.functionalInterface;
 
-import com.sun.javafx.image.impl.IntArgb;
 
 import java.util.Arrays;
 import java.util.Collections;
