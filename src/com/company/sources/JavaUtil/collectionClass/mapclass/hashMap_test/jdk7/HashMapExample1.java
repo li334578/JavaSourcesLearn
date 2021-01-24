@@ -3,6 +3,7 @@ package com.company.sources.JavaUtil.collectionClass.mapclass.hashMap_test.jdk7;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author : LiWenBo
@@ -33,5 +34,10 @@ public class HashMapExample1 {
             // 可以避免并发修改异常
             iterator.remove();
         }
+
+        // ConcurrentHashMap
+        ConcurrentHashMap<String, String> concurrentHashMap = new ConcurrentHashMap<>();
+        // segment[]
+        // hashEntry[] 局部扩容该数组
     }
 }
