@@ -1,9 +1,8 @@
 package com.company.sources.JavaUtil.collectionClass.mapclass.hashMap_test.jdk7;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * @author : LiWenBo
@@ -39,5 +38,12 @@ public class HashMapExample1 {
         ConcurrentHashMap<String, String> concurrentHashMap = new ConcurrentHashMap<>();
         // segment[]
         // hashEntry[] 局部扩容该数组
+        // while(!trylock)
+        // lock
+        // 复习stream
+        List<String> list1 = Arrays.asList("aaa","bbb","ccc","ddd","aaa");
+        list1.stream().collect(Collectors.toCollection(HashSet::new));
+        Map<String, String> collect = list.stream().collect(Collectors.toMap(item -> item, item -> item, (k1, k2) -> k1));
+
     }
 }
