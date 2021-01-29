@@ -13,5 +13,12 @@ public class Test {
         mail.send();
         Sender sortMsg = senderFactory.getInstance("SortMsg");
         sortMsg.send();
+        System.out.println("----------------------------");
+        // 新工厂模式
+        SenderFactoryNew senderFactoryNew = new SenderFactoryNew();
+        Sender mailInstance = senderFactoryNew.getMailInstance();
+        mailInstance.send();
+        Sender sortMsgInstance = senderFactoryNew.getSortMsgInstance();
+        sortMsgInstance.send();
     }
 }
