@@ -20,5 +20,11 @@ public class Test {
         mailInstance.send();
         Sender sortMsgInstance = senderFactoryNew.getSortMsgInstance();
         sortMsgInstance.send();
+        System.out.println("-------------------------------");
+        // 静态工厂类
+        Sender mailInstance1 = SenderFactoryStatic.getMailInstance();
+        mailInstance1.send();
+        Sender sortMsgInstance1 = SenderFactoryStatic.getSortMsgInstance();
+        sortMsgInstance1.send();
     }
 }
