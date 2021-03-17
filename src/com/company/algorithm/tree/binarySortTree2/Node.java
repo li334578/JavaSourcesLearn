@@ -54,7 +54,32 @@ public class Node {
      * @return 高度值
      */
     public int height() {
-        return Math.max(left == null ? 0 : left.height(), right == null ? 0 : right.height());
+        return Math.max(left == null ? 0 : left.height(), right == null ? 0 : right.height()) + 1;
+    }
+
+    /**
+     * 获取左子树的高度
+     *
+     * @return 高度值
+     */
+    public int getLeftHeight() {
+        if (this.left == null) {
+            return 0;
+        }
+        return this.left.height();
+    }
+
+
+    /**
+     * 获取右子树的高度
+     *
+     * @return 高度值
+     */
+    public int getRightHeight() {
+        if (this.right == null) {
+            return 0;
+        }
+        return this.right.height();
     }
 
     /**
@@ -79,6 +104,50 @@ public class Node {
                 this.right.add(node);
             }
         }
+        // 查询是否平衡
+        if (getLeftHeight() - getRightHeight() > 1) {
+            // 左侧不平衡进行右旋转
+            if (left.getLeftHeight() < left.getRightHeight()) {
+                // 双旋转
+                left.leftRotate();
+            }
+            rightRotate();
+        }
+        if (getRightHeight() - getLeftHeight() > 1) {
+            // 左旋转
+            if (right.getRightHeight() < right.getLeftHeight()) {
+                // 双旋转
+                right.rightRotate();
+            }
+            leftRotate();
+        }
+    }
+
+    private void leftRotate() {
+        Node newLeft = new Node(this.value);
+        newLeft.left = this.left;
+        newLeft.right = this.right.left;
+        this.value = this.right.value;
+        this.right = this.right.right;
+        this.left = newLeft;
+    }
+
+    /**
+     * 右旋转
+     */
+    private void rightRotate() {
+        // 创建一个新节点 值为当前节点的值
+        Node newRight = new Node(this.value);
+        // 将当前节点的右子树设置为新节点的右子树
+        newRight.right = this.right;
+        // 将新节点的左子树设置为当前节点的左子树的右子树
+        newRight.left = this.left.right;
+        // 将当前节点的左节点的值赋值给当前节点
+        this.value = this.left.value;
+        // 将当前节点的左子树的左子树赋值给当前节点的左子树
+        this.left = this.left.left;
+        // 将当前节点的右子树设置为新节点
+        this.right = newRight;
     }
 
     /**
