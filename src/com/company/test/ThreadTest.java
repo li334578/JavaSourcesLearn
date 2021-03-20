@@ -1,5 +1,6 @@
 package com.company.test;
 
+import java.util.HashSet;
 import java.util.concurrent.*;
 
 /**
@@ -25,5 +26,9 @@ public class ThreadTest {
          * 3 DiscardPolicy 该策略下直接丢弃任务，什么也不做。
          * 4 DiscardOldestPolicy 抛弃队列首部的任务，尝试把被拒绝的任务放入队列。
          */
+        HashSet<String> hashSet = new HashSet<>();
+        hashSet.add("cd");
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("123");
     }
 }
