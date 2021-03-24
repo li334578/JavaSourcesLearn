@@ -27,3 +27,36 @@ SELECT score.s_id, avg(score.s_score) as avg_score from score GROUP BY score.s_i
 
 SELECT student.s_id, avg(IFNULL(score.s_score,0)) as avg_score from student
 left join score on student.s_id = score.s_id GROUP BY score.s_id HAVING avg_score < 60; -- 考虑未参加考试的情况
+
+-- 5、查询没学过“张三”老师课的学生的学号、姓名（重点）
+
+-- 学过张三老师课程的学生的id信息
+SELECT score.s_id from course
+    INNER JOIN teacher on course.t_id = teacher.t_id
+    LEFT JOIN score on score.c_id = course.c_id
+    where teacher.t_name = '张三';
+
+SELECT student.s_id,student.s_name from student where not EXISTS
+    (SELECT score.s_id from course
+    INNER JOIN teacher on course.t_id = teacher.t_id
+    LEFT JOIN score on score.c_id = course.c_id
+    where teacher.t_name = '张三' and student.s_id = score.s_id);
+
+-- 查询学过“张三”老师所教的所有课的同学的学号、姓名（重点）
+
+SELECT  DISTINCT student.* from
+(SELECT course.c_id from course left join teacher on course.t_id = teacher.t_id where teacher.t_name = '张三') temp
+left JOIN score on temp.c_id = score.c_id left JOIN student on score.s_id = student.s_id;
+
+
+-- 查询学过编号为“01”的课程并且也学过编号为“02”的课程的学生的学号、姓名（重点）
+SELECT student.s_id,student.s_name from student where student.s_id in (
+SELECT * from (SELECT score.s_id from score where score.c_id = '01') temp1
+                where temp1.s_id in (SELECT score.s_id from score where score.c_id = '02'));
+
+-- 查询学过编号为“01”的课程但没有学过编号为“02”的课程的学生的学号、姓名（重点）
+
+
+SELECT student.s_id,student.s_name from student where student.s_id in (
+SELECT * from (SELECT score.s_id from score where score.c_id = '01') temp1
+    where temp1.s_id not in (SELECT score.s_id from score where score.c_id = '02'));
