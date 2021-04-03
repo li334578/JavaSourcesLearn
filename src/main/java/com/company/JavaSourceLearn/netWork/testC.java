@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.netWork;
+package com.company.JavaSourceLearn.netWork;
 
 import java.io.InputStream;
 import java.io.OutputStream;

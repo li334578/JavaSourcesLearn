@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.sources.functionalInterface;
+package com.company.JavaSourceLearn.sources.functionalInterface;
 
 
 import java.util.Arrays;

@@ -1,6 +1,6 @@
-package main.java.com.company.JavaSourceLearn.algorithm.graph;
+package com.company.JavaSourceLearn.algorithm.graph;
 
-import main.java.com.company.JavaSourceLearn.algorithm.MyStack;
+import com.company.JavaSourceLearn.algorithm.MyStack;
 
 import java.util.Arrays;
 

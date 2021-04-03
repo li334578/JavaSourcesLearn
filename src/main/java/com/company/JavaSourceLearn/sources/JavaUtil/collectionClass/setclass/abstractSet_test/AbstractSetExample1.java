@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.sources.JavaUtil.collectionClass.setclass.abstractSet_test;
+package com.company.JavaSourceLearn.sources.JavaUtil.collectionClass.setclass.abstractSet_test;
 
 /**
  * @author : LiWenBo

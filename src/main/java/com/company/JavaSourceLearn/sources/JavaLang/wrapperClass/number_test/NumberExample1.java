@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.sources.JavaLang.wrapperClass.number_test;
+package com.company.JavaSourceLearn.sources.JavaLang.wrapperClass.number_test;
 
 /**
  * @author : LiWenBo

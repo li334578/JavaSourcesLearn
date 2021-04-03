@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.sources.JavaUtil.collectionClass.mapclass.treeMap_test;
+package com.company.JavaSourceLearn.sources.JavaUtil.collectionClass.mapclass.treeMap_test;
 
 /**
  * @author : LiWenBo

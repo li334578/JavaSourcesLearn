@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.leetcode.test202101;
+package com.company.JavaSourceLearn.leetcode.test202101;
 
 /**
  * @author : LiWenBo

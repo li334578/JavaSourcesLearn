@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.sources.JavaLang.stringClass.StringBuffer_test;
+package com.company.JavaSourceLearn.sources.JavaLang.stringClass.StringBuffer_test;
 
 /**
  * @author : LiWenBo

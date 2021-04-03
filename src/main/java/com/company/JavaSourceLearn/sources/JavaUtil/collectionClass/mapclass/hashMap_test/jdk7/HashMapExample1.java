@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.sources.JavaUtil.collectionClass.mapclass.hashMap_test.jdk7;
+package com.company.JavaSourceLearn.sources.JavaUtil.collectionClass.mapclass.hashMap_test.jdk7;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

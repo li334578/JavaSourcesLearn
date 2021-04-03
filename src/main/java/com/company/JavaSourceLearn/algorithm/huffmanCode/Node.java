@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.algorithm.huffmanCode;
+package com.company.JavaSourceLearn.algorithm.huffmanCode;
 
 /**
  * @author : LiWenBo

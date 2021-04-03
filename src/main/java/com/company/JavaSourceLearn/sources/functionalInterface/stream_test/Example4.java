@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.sources.functionalInterface.stream_test;
+package com.company.JavaSourceLearn.sources.functionalInterface.stream_test;
 
 import java.util.IntSummaryStatistics;
 import java.util.Random;

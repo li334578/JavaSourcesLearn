@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.algorithm;
+package com.company.JavaSourceLearn.algorithm;
 
 import java.util.Arrays;
 

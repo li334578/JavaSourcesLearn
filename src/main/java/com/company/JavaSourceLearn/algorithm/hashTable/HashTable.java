@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.algorithm.hashTable;
+package com.company.JavaSourceLearn.algorithm.hashTable;
 
 import java.util.Arrays;
 

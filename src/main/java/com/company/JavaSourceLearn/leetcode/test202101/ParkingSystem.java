@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.leetcode.test202101;
+package com.company.JavaSourceLearn.leetcode.test202101;
 
 import java.util.ArrayList;
 import java.util.List;

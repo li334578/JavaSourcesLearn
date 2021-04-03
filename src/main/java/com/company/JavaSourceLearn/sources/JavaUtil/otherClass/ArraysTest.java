@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.sources.JavaUtil.otherClass;
+package com.company.JavaSourceLearn.sources.JavaUtil.otherClass;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.sources.JavaLang.wrapperClass.character_test;
+package com.company.JavaSourceLearn.sources.JavaLang.wrapperClass.character_test;
 
 /**
  * @author : LiWenBo

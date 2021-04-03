@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.designPatterns.factoryPatterns;
+package com.company.JavaSourceLearn.designPatterns.factoryPatterns;
 
 /**
  * @author : LiWenBo

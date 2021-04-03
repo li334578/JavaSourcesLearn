@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.sources.JavaLang.otherClass.Package_test;
+package com.company.JavaSourceLearn.sources.JavaLang.otherClass.Package_test;
 
 /**
  * @author : LiWenBo

@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.algorithm.tree;
+package com.company.JavaSourceLearn.algorithm.tree;
 
 /**
  * @author : LiWenBo

@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.sources.JavaUtil.collectionClass.otherClass.stack_test;
+package com.company.JavaSourceLearn.sources.JavaUtil.collectionClass.otherClass.stack_test;
 
 /**
  * @author : LiWenBo

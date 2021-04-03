@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.algorithm.huffmanTree;
+package com.company.JavaSourceLearn.algorithm.huffmanTree;
 
 import java.util.ArrayList;
 import java.util.Collections;

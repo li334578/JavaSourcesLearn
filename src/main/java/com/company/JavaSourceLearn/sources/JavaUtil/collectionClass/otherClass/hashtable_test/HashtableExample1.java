@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.sources.JavaUtil.collectionClass.otherClass.hashtable_test;
+package com.company.JavaSourceLearn.sources.JavaUtil.collectionClass.otherClass.hashtable_test;
 
 /**
  * @author : LiWenBo

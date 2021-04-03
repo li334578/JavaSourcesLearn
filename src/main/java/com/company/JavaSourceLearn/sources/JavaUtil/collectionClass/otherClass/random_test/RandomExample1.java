@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.sources.JavaUtil.collectionClass.otherClass.random_test;
+package com.company.JavaSourceLearn.sources.JavaUtil.collectionClass.otherClass.random_test;
 
 /**
  * @author : LiWenBo

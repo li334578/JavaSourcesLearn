@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.sources.JavaLang.wrapperClass.utils;
+package com.company.JavaSourceLearn.sources.JavaLang.wrapperClass.utils;
 
 /**
  * @author : LiWenBo

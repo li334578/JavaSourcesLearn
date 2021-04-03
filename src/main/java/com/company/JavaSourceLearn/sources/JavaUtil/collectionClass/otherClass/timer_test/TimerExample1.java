@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.sources.JavaUtil.collectionClass.otherClass.timer_test;
+package com.company.JavaSourceLearn.sources.JavaUtil.collectionClass.otherClass.timer_test;
 
 import java.util.Timer;
 import java.util.TimerTask;

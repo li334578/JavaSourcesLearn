@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.sources.JavaUtil.collectionClass.listclass.linkedList_test;
+package com.company.JavaSourceLearn.sources.JavaUtil.collectionClass.listclass.linkedList_test;
 
 /**
  * @author : LiWenBo

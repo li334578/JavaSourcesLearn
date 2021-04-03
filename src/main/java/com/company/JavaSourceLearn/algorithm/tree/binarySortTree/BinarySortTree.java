@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.algorithm.tree.binarySortTree;
+package com.company.JavaSourceLearn.algorithm.tree.binarySortTree;
 
 /**
  * @author : LiWenBo

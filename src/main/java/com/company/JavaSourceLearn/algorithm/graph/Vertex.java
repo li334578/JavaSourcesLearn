@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.algorithm.graph;
+package com.company.JavaSourceLearn.algorithm.graph;
 
 /**
  * @author : LiWenBo

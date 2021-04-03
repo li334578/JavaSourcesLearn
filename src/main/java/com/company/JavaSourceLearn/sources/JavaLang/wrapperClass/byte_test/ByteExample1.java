@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.sources.JavaLang.wrapperClass.byte_test;
+package com.company.JavaSourceLearn.sources.JavaLang.wrapperClass.byte_test;
 
 /**
  * @author : LiWenBo

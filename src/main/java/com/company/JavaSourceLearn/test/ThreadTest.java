@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.test;
+package com.company.JavaSourceLearn.test;
 
 import java.util.HashSet;
 import java.util.concurrent.*;

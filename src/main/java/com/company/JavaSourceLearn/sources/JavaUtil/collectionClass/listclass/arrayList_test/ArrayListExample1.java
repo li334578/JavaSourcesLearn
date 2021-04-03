@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.sources.JavaUtil.collectionClass.listclass.arrayList_test;
+package com.company.JavaSourceLearn.sources.JavaUtil.collectionClass.listclass.arrayList_test;
 
 import java.util.*;
 

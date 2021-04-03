@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.sources.JavaUtil.collectionClass.mapclass.abstractMap_test;
+package com.company.JavaSourceLearn.sources.JavaUtil.collectionClass.mapclass.abstractMap_test;
 
 /**
  * @author : LiWenBo

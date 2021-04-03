@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.sources.functionalInterface.defaultMethod;
+package com.company.JavaSourceLearn.sources.functionalInterface.defaultMethod;
 
 
 /**

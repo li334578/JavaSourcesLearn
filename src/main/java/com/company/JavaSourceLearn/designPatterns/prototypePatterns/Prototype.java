@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.designPatterns.prototypePatterns;
+package com.company.JavaSourceLearn.designPatterns.prototypePatterns;
 
 /**
  * @Author: liwenbo

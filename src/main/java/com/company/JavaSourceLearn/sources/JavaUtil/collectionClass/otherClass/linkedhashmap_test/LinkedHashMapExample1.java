@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.sources.JavaUtil.collectionClass.otherClass.linkedhashmap_test;
+package com.company.JavaSourceLearn.sources.JavaUtil.collectionClass.otherClass.linkedhashmap_test;
 
 /**
  * @author : LiWenBo

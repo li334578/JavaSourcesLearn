@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.sources.JavaLang.wrapperClass.short_test;
+package com.company.JavaSourceLearn.sources.JavaLang.wrapperClass.short_test;
 
 
 /**

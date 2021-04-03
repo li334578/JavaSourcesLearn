@@ -1,4 +1,4 @@
-package main.java.com.company.JavaSourceLearn.sources.JavaLang.otherClass.Error_test;
+package com.company.JavaSourceLearn.sources.JavaLang.otherClass.Error_test;
 
 /**
  * @author : LiWenBo
