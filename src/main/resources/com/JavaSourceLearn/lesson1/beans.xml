@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+
+    <!--
+    定义一个bean
+    id：bean的唯一标识，可以通过这个标识从容器中获取这个bean对象
+    class：这个bean的类型，完整类名称
+    -->
+    <bean id="helloWorld" class="com.company.JavaSourceLearn.springLearn.module.lesson1.HelloWorld"/>
+    <!--  通过id进行定义  -->
+    <bean id="person1" class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.Person">
+        <property name="id" value="1"/>
+        <property name="name" value="熊大"/>
+    </bean>
+    <!-- 通过name进行定义 -->
+    <bean name="person2" class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.Person">
+        <property name="id" value="2"/>
+        <property name="name" value="熊二"/>
+    </bean>
+    <!--  通过id和name进行定义 -->
+    <bean id="person3" name="person3_1" class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.Person">
+        <property name="id" value="3"/>
+        <property name="name" value="张三"/>
+    </bean>
+    <!--  通过id和name及多个别名 [person4_2,person4_3]  -->
+    <bean id="person4" name="person4_1,person4_2,person4_3"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.Person">
+        <property name="id" value="4"/>
+        <property name="name" value="李四"/>
+    </bean>
+    <!-- 通过id和name及多个别名 [person5_2,person5_3,person5_4,person5_5] -->
+    <bean id="person5" name="person5_1,person5_2;person5_3;person5_4,person5_5"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.Person">
+        <property name="id" value="5"/>
+        <property name="name" value="王五"/>
+    </bean>
+    <alias name="person1" alias="person1_1"/>
+    <alias name="person2" alias="person2_1"/>
+    <!-- 匿名bean1 -->
+    <bean class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.Person">
+        <property name="id" value="6"/>
+        <property name="name" value="赵六"/>
+    </bean>
+
+    <!-- 匿名bean2 -->
+    <bean class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.Person">
+        <property name="id" value="7"/>
+        <property name="name" value="钱七"/>
+    </bean>
+
+    <!-- 匿名bean3 -->
+    <bean class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.Person">
+        <property name="id" value="8"/>
+        <property name="name" value="周八"/>
+    </bean>
+    <!--  导入其他xml文件 -->
+    <import resource="persons.xml"/>
+</beans>

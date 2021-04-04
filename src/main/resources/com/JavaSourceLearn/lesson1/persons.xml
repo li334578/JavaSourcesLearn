@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+    <bean id="person7" name="person7_1"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.Person">
+        <constructor-arg index="0" value="7"/>
+        <constructor-arg index="1" value="吴九"/>
+    </bean>
+
+    <!-- 静态工厂无参方式创建person -->
+    <bean id="person8" name="person8_1"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson1.PersonStaticFactory"
+          factory-method="getNoArgsInstance"/>
+    <!--- 静态工厂有参方式创建person -->
+    <bean id="person9" name="person9_1"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson1.PersonStaticFactory"
+          factory-method="getAllArgsInstance">
+        <constructor-arg index="0" value="1009"/>
+        <constructor-arg index="1" value="李1009"/>
+    </bean>
+    <!-- 创建一个工厂实例 -->
+    <bean id="personFactory" class="com.company.JavaSourceLearn.springLearn.module.lesson1.PersonFactory"/>
+    <bean id="person10" name="person10_1"
+          factory-bean="personFactory" factory-method="getNoArgPerson"/>
+    <bean id="person11" name="person11_1" factory-bean="personFactory" factory-method="getAllArgPerson">
+        <constructor-arg index="0" value="1010"/>
+        <constructor-arg index="1" value="通过beanFactoryAllArgPerson创建"/>
+    </bean>
+    <!-- beanFactory实现类创建bean -->
+    <bean id="person12" name="person12_1" class="com.company.JavaSourceLearn.springLearn.module.lesson1.PersonFactoryBean"/>
+</beans>
