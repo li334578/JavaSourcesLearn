@@ -194,6 +194,311 @@ Spring系列第6篇：bean作用域scope详解
 	4.	一个应用中可以有多个spring容器
 	5.	自定义scope 3个步骤，实现Scope接口，将实现类注册到spring容器，使用自定义的sope
 Spring系列第7篇：依赖注入之手动注入
+    spring依赖注入
+	spring中依赖注入主要分为手动注入和自动注入，本文我们主要说一下手动注入，手动注入需要我们明确配置需要注入的对象
+	将被依赖方注入到依赖方，通常有2种方式：构造函数的方式和set属性的方式，spring中也是通过这两种方式实现注入的
+	通过构造器注入
+	构造器的参数就是被依赖的对象，构造器注入又分为3种注入方式：
+	•	根据构造器参数索引注入
+	•	根据构造器参数类型注入
+	•	根据构造器参数名称注入
+	根据构造器参数索引注入
+	用法
+	<bean id="diByConstructorParamIndex" class="com.javacode2018.lesson001.demo5.UserModel">
+		<constructor-arg index="0" value="马士兵老师"/>
+		<constructor-arg index="1" value="上海市"/>
+	</bean>
+	constructor-arg用户指定构造器的参数
+	index：构造器参数的位置，从0开始
+	value：构造器参数的值，value只能用来给简单的类型设置值，
+	value对应的属性类型只能为byte,int,long,float,double,boolean,Byte,Long,Float,Double,枚举，
+	spring容器内部注入的时候会将value的值转换为对应的类型。
+	优缺点
+	参数位置的注入对参数顺序有很强的依赖性，若构造函数参数位置被人调整过，会导致注入出错。
+	不过通常情况下，不建议去在代码中修改构造函数，如果需要新增参数的，可以新增一个构造函数来实现，这算是一种扩展，不会影响目前已有的功能。
+	根据构造器参数类型注入
+	用法
+	<bean id="diByConstructorParamType" class="com.javacode2018.lesson001.demo5.UserModel">
+		<constructor-arg type="参数类型" value="参数值"/>
+		<constructor-arg type="参数类型" value="参数值"/>
+	</bean>
+	constructor-arg用户指定构造器的参数
+	type：构造函数参数的完整类型，如：java.lang.String,int,double
+	value：构造器参数的值，value只能用来给简单的类型设置值
+	优缺点
+	实际上按照参数位置或者按照参数的类型注入，都有一个问题，很难通过bean的配置文件，
+	知道这个参数是对应UserModel中的那个属性的，代码的可读性不好，
+	比如我想知道这每个参数对应UserModel中的那个属性，必须要去看UserModel的源码
+	根据构造器参数名称注入
+	用法
+	<bean id="diByConstructorParamName" class="com.javacode2018.lesson001.demo5.UserModel">
+		<constructor-arg name="参数类型" value="参数值"/>
+		<constructor-arg name="参数类型" value="参数值"/>
+	</bean>
+	constructor-arg用户指定构造器的参数
+	name：构造参数名称
+	value：构造器参数的值，value只能用来给简单的类型设置值
+	关于方法参数名称的问题
+	java通过反射的方式可以获取到方法的参数名称，不过源码中的参数通过编译之后会变成class对象，
+	通常情况下源码变成class文件之后，参数的真实名称会丢失，参数的名称会变成arg0,arg1,arg2这样的，
+	和实际参数名称不一样了，如果需要将源码中的参数名称保留在编译之后的class文件中，编译的时候需要用下面的命令：
+	javac -parameters java源码
+	但是我们难以保证编译代码的时候，操作人员一定会带上-parameters参数，
+	所以方法的参数可能在class文件中会丢失，导致反射获取到的参数名称和实际参数名称不符，这个我们需要先了解一下。
+	参数名称可能不稳定的问题，spring提供了解决方案，通过ConstructorProperties注解来定义参数的名称，将这个注解加在构造方法上面
+	setter注入
+	通常情况下，我们的类都是标准的javabean，javabean类的特点：
+	•	属性都是private访问级别的
+	•	属性通常情况下通过一组setter（修改器）和getter（访问器）方法来访问
+	•	setter方法，以set 开头，后跟首字母大写的属性名，如：setUserName，简单属性一般只有一个方法参数，方法返回值通常为void;
+	•	getter方法，一般属性以get开头，对于boolean类型一般以is开头，后跟首字母大写的属性名，如：getUserName，isOk；
+	spring对符合javabean特点类，提供了setter方式的注入，会调用对应属性的setter方法将被依赖的对象注入进去。
+	用法
+	<bean id="" class="">
+		<property name="属性名称" value="属性值" />
+		...
+		<property name="属性名称" value="属性值" />
+	</bean>
+	property用于对属性的值进行配置，可以有多个
+	name：属性的名称
+	value：属性的值
+	优缺点
+	setter注入相对于构造函数注入要灵活一些，构造函数需要指定对应构造函数中所有参数的值，
+	而setter注入的方式没有这种限制，不需要对所有属性都进行注入，可以按需进行注入。
+	上面介绍的都是注入普通类型的对象，都是通过value属性来设置需要注入的对象的值的，
+	value属性的值是String类型的，spring容器内部自动会将value的值转换为对象的实际类型。
+	若我们依赖的对象是容器中的其他bean对象的时候，需要用下面的方式进行注入
+	注入容器中的bean
+	注入容器中的bean有两种写法：
+	•	ref属性方式
+	•	内置bean的方式
+	ref属性方式
+	将上面介绍的constructor-arg或者property元素的value属性名称替换为ref，ref属性的值为容器中其他bean的名称，如：
+	构造器方式，将value替换为ref：
+	<constructor-arg ref="需要注入的bean的名称"/>
+	setter方式，将value替换为ref：
+	<property name="属性名称" ref="需要注入的bean的名称" />
+	内置bean的方式
+	构造器的方式：
+	<constructor-arg>
+		<bean class=""/>
+	</constructor-arg>
+	setter方式：
+	<property name="属性名称">
+		<bean class=""/>
+	</property>
+	其他类型注入
+	注入java.util.List（list元素）
+	<list>
+		<value>Spring</value>
+		或
+		<ref bean="bean名称"/>
+		或
+		<list></list>
+		或
+		<bean></bean>
+		或
+		<array></array>
+		或
+		<map></map>
+	</list>
+	注入java.util.Set（set元素）
+	<set>
+		<value>Spring</value>
+		或
+		<ref bean="bean名称"/>
+		或
+		<list></list>
+		或
+		<bean></bean>
+		或
+		<array></array>
+		或
+		<map></map>
+	</set>
+	注入java.util.Map（map元素）
+	<map>
+		<entry key="马士兵老师" value="30" key-ref="key引用的bean名称" value-ref="value引用的bean名称"/>
+		或
+		<entry>
+			<key>
+				value对应的值，可以为任意类型
+			</key>
+			<value>
+				value对应的值，可以为任意类型
+			</value>
+		</entry>
+	</map>
+	注入数组（array元素）
+	<array>
+		数组中的元素
+	</array>
+	注入java.util.Properties（props元素）
+	Properties类相当于键值都是String类型的Map对象，使用props进行注入，如下：
+	<props>
+		<prop key="key1">java高并发系列</prop>
+		<prop key="key2">mybatis系列</prop>
+		<prop key="key3">mysql系列</prop>
+	</props>
+	总结
+	1.	本文主要讲解了xml中bean的依赖注入，都是采用硬编码的方式进行注入的，这种算是手动的方式
+	2.	注入普通类型通过value属性或者value元素设置注入的值；注入对象如果是容器的其他bean的时候，需要使用ref属性或者ref元素或者内置bean元素的方式
+	3.	还介绍了其他几种类型List、Set、Map、数组、Properties类型的注入，多看几遍加深理解
+	4.	后面我们将介绍spring为我们提供的更牛逼的自动注入
+Spring系列第8篇：依赖注入之自动注入（autowire）详解
+	手动注入的不足
+	上篇文章中介绍了依赖注入中的手动注入，所谓手动注入是指在xml中采用硬编码的方式来配置注入的对象，
+	比如通过构造器注入或者set方法注入，这些注入的方式都存在不足
+	自动注入
+	自动注入是采用约定大约配置的方式来实现的，程序和spring容器之间约定好，遵守某一种都认同的规则，来实现自动注入。
+	xml中可以在bean元素中通过autowire属性来设置自动注入的方式：
+	<bean id="" class="" autowire="byType|byName|constructor|default" />
+	•	byteName：按照名称进行注入
+	•	byType：按类型进行注入
+	•	constructor：按照构造方法进行注入
+	•	default：默认注入方式
+	按照名称进行注入（byName）
+	用法
+	autowire设置为byName
+	<bean id="" class="X类" autowire="byName"/>
+	spring容器会按照set属性的名称去容器中查找同名的bean对象，然后将查找到的对象通过set方法注入到对应的bean中，未找到对应名称的bean对象则set方法不进行注入
+	需要注入的set属性的名称和被注入的bean的名称必须一致。
+	优缺点
+	按名称进行注入的时候，要求名称和set属性的名称必须同名，相对于硬编码的方式注入，确实节省了不少代码。
+	按照类型进行自动注入
+	用法
+	autowire设置为byType
+	<bean id="" class="X类" autowire="byType"/>
+	spring容器会遍历x类中所有的set方法，会在容器中查找和set参数类型相同的bean对象，
+	将其通过set方法进行注入，未找到对应类型的bean对象则set方法不进行注入。
+	需要注入的set属性的类型和被注入的bean的类型需要满足isAssignableFrom关系。
+	按照类型自动装配的时候，如果按照类型找到了多个符合条件的bean，系统会报错。
+	set方法的参数如果是下面的类型或者下面类型的数组的时候，这个set方法会被跳过注入：
+	Object,Boolean,boolean,Byte,byte,Character,char,Double,double,Float,float,Integer,int,Long,
+	Short,shot,Enum,CharSequence,Number,Date,java.time.temporal.Temporal,java.net.URI,java.net.URI,
+	java.util.Locale,java.lang.Class
+	优缺点
+	相对于手动注入，节省了不少代码，新增或者删除属性，只需要增减对应的set方法就可以了，更容易扩展了。
+	注入类型匹配的所有bean(重点)
+	按照类型注入还有2中比较牛逼的用法
+	•	一个容器中满足某种类型的bean可以有很多个，将容器中某种类型中的所有bean，
+	通过set方法注入给一个java.util.List<需要注入的Bean的类型或者其父类型或者其接口>对象
+	•	将容器中某种类型中的所有bean，通过set方法注入给一个java.util.Map<String,需要注入的Bean的类型或者其父类型或者其接口>对象
+	按照构造函数进行自动注入
+	用法
+	autowire设置为constructor
+	<bean id="" class="X类" autowire="constructor"/>
+	spring会找到x类中所有的构造方法（一个类可能有多个构造方法），然后将这些构造方法进行排序
+	（先按修饰符进行排序，public的在前面，其他的在后面，如果修饰符一样的，会按照构造函数参数数量倒叙，
+	也就是采用贪婪的模式进行匹配，spring容器会尽量多注入一些需要的对象）得到一个构造函数列表，会轮询这个构造器列表，
+	判断当前构造器所有参数是否在容器中都可以找到匹配的bean对象，如果可以找到就使用这个构造器进行注入，
+	如果不能找到，那么就会跳过这个构造器，继续采用同样的方式匹配下一个构造器，直到找到一个合适的为止。	
+	autowire=default
+	用法
+	bean xml的根元素为beans，注意根元素有个default-autowire属性，
+	这个属性可选值有(no|byName|byType|constructor|default)，
+	这个属性可以批量设置当前文件中所有bean的自动注入的方式，
+	bean元素中如果省略了autowire属性，那么会取default-autowire的值作为其autowire的值，
+	而每个bean元素还可以单独设置自己的autowire覆盖default-autowire的配置
+	<?xml version="1.0" encoding="UTF-8"?>
+	<beans xmlns="http://www.springframework.org/schema/beans"
+		   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		   xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.3.xsd"
+		   default-autowire="byName">
+
+	</beans>
+	总结
+	•	xml中手动注入存在的不足之处，可以通过自动注入的方式来解决，本文介绍了3中自动注入：
+	通过名称自动注入、通过类型自动注入、通过构造器自动注入
+	•	按类型注入中有个比较重要的是注入匹配类型所有的bean，可以将某种类型所有的bean注入给一个List对象，
+	可以将某种类型的所有bean按照bean名称->bean对象的映射方式注入给一个Map对象，这种用法比较重要，用途比较大，要掌握
+	•	spring中还有其他自动注入的方式，用起来会更爽，后面的文章中我们会详细介绍。
+Spring系列第9篇：depend-on干什么的
+	1.	bean对象的创建顺序和bean xml中定义的顺序一致
+	2.	bean销毁的顺序和bean xml中定义的顺序相反
+	1.	bean对象的创建顺序和bean依赖的顺序一致
+	2.	bean销毁的顺序和bean创建的顺序相反
+	通过depend-on干预bean创建和销毁顺序
+	上面看到了对于无依赖的bean，通过定义的顺序确实可以干预bean的创建顺序，通过强依赖也可以干预bean的创建顺序。
+	那么如果xml中定义的bean特别多，而有些bean之间也没有强依赖关系，此时如果想去调整bean的创建和销毁的顺序，
+	得去调整xml中bean的定义顺序，或者去加强依赖，这样是非常不好的，spring中可以通过depend-on来解决这些问题，
+	在不调整bean的定义顺序和强加依赖的情况下，可以通过通过depend-on属性来设置当前bean的依赖于哪些bean，
+	那么可以保证depend-on指定的bean在当前bean之前先创建好，销毁的时候在当前bean之后进行销毁。
+	depend-on使用方式：
+	<bean id="bean1" class="" depend-on="bean2,bean3; bean4" />
+	depend-on：设置当前bean依赖的bean名称，可以指定多个，多个之间可以用”,;空格“进行分割
+	上面不管bean2,bean2,bean4在任何地方定义，都可以确保在bean1创建之前，会先将bean2,bean3,bean4创建好，
+	表示bean1依赖于这3个bean，可能bean1需要用到bean2、bean3、bean4中生成的一些资源或者其他的功能等，
+	但是又没有强制去在bean1类中通过属性定义强依赖的方式去依赖于bean2、bean3、bean4；
+	当然销毁的时候也会先销毁当前bean，再去销毁被依赖的bean，即先销毁bean1，再去销毁depend-on指定的bean
+	1.	无依赖的bean创建顺序和定义的顺序一致，销毁顺序刚好相反
+	2.	通过构造器强依赖的bean，会先创建构造器参数中对应的bean，然后才会创建当前bean，销毁顺序刚好相反
+	3.	depend-on可以指定档期bean依赖的bean，通过这个可以确保depend-on指定的bean在当前bean创建之前先创建好，销毁顺序刚好相反
+Spring系列第10篇：primary可以解决什么问题
+	org.springframework.beans.factory.NoUniqueBeanDefinitionException
+	当希望从容器中获取到一个bean对象的时候，容器中却找到了多个匹配的bean，此时spring不知道如何选择了，处于懵逼状态，就会报这个异常。
+	spring中可以通过bean元素的primary属性来解决这个问题，可以通过这个属性来指定当前bean为主要候选者，
+	当容器查询一个bean的时候，如果容器中有多个候选者匹配的时候，此时spring会返回主要的候选者。
+	我们将serviceA的primary属性置为true了，将其置为主要候选者，容器中如果查找bean的时候，如果有多个匹配的，就以他为主。
+	候选者中如果有多个bean都将primary置为true，此时spring还是会懵逼的，也会报错，不知道如何选择了。
+	总结
+	当从容器中查找一个bean的时候，如果容器中出现多个Bean候选者时，
+	可以通过primary="true"将当前bean置为首选者，那么查找的时候就会返回主要的候选者，否则将抛出异常。
+Spring系列第11篇：bean中的autowire-candidate属性又是干什么的
+	spring还有一种方法也可以解决这个问题，可以设置某个bean是否在自动注入的时候是否为作为候选bean，通过bean元素的autowire-candidate属性类配置，如下：
+	<bean id="serviceA" class="com.javacode2018.lesson001.demo8.SetterBean$ServiceA" autowire-candidate="false"/>
+	autowire-candidate：设置当前bean在被其他对象作为自动注入对象的时候，是否作为候选bean，默认值是true。
+	autowire-candidates属性解析源码
+	beans元素是xml中定义bean的根元素，beans元素有个default-autowire-candidates属性，
+	用于定义哪些bean可以作为候选者，default-autowire-candidates的值是个通配符如：
+	default-autowire-candidates="*Service"
+	再来说一下bean元素的autowire-candidate属性，这个属性有3个可选值：
+	•	default：这个是默认值，autowire-candidate如果不设置，其值就是default
+	•	true：作为候选者
+	•	false：不作为候选者
+Spring系列第12篇：lazy-init：bean延迟初始化
+	bean初始化的2种方式
+	1.	实时初始化
+	2.	延迟初始化
+	bean实时初始化
+	在容器启动过程中被创建组装好的bean，称为实时初始化的bean，
+	spring中默认定义的bean都是实时初始化的bean，这些bean默认都是单例的，在容器启动过程中会被创建好，然后放在spring容器中以供使用。
+	实时初始化bean的有一些优点
+	1.	更早发下bean定义的错误：实时初始化的bean如果定义有问题，会在容器启动过程中会抛出异常，让开发者快速发现问题
+	2.	查找bean更快：容器启动完毕之后，实时初始化的bean已经完全创建好了，
+	此时被缓存在spring容器中，当我们需要使用的时候，容器直接返回就可以了，速度是非常快的
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
 
 	
 

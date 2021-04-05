@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+    <!-- 单例 -->
+    <bean id="personScope1" scope="singleton"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.PersonScope">
+        <constructor-arg index="0" value="singleton"/>
+    </bean>
+    <!-- 多例 -->
+    <bean id="personScope2" scope="prototype"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.PersonScope">
+        <constructor-arg index="0" value="prototype"/>
+    </bean>
+    <!-- 将自定义的scope作用于注册到bean中 -->
+    <bean id="threadBeanFactoryPostProcessor"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson1.ThreadBeanFactoryPostProcessor"/>
+    <bean id="threadScope" scope="threadScope"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.ThreadScope">
+        <constructor-arg index="0" value="thread"/>
+    </bean>
+</beans>
