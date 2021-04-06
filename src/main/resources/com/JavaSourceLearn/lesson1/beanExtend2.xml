@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="serviceA1" class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.ServiceA"/>
+
+    <bean id="baseService" abstract="true">
+        <property name="serviceA" ref="serviceA1"/>
+        <property name="serviceName" value="service name"/>
+    </bean>
+
+    <bean id="serviceB" parent="baseService"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.ServiceB"/>
+
+    <bean id="serviceC" parent="baseService"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.ServiceC">
+        <property name="serviceA" ref="serviceA1"/>
+        <property name="serviceName" value="serviceC name"/>
+    </bean>
+
+</beans>

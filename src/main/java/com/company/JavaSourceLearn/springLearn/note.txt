@@ -468,6 +468,135 @@ Spring系列第12篇：lazy-init：bean延迟初始化
 	1.	更早发下bean定义的错误：实时初始化的bean如果定义有问题，会在容器启动过程中会抛出异常，让开发者快速发现问题
 	2.	查找bean更快：容器启动完毕之后，实时初始化的bean已经完全创建好了，
 	此时被缓存在spring容器中，当我们需要使用的时候，容器直接返回就可以了，速度是非常快的
+	延迟初始化的bean
+	从上面我们可以看出，实时初始化的bean都会在容器启动过程中创建好，如果程序中定义的bean非常多，
+	并且有些bean创建的过程中比较耗时的时候，会导致系统消耗的资源比较多，并且会让整个启动时间比较长，
+	这个我估计大家都是有感受的，使用spring开发的系统比较大的时候，整个系统启动耗时是比较长的，基本上多数时间都是在创建和组装bean。
+	spring对这些问题也提供了解决方案：bean延迟初始化。
+	所谓延迟初始化，就是和实时初始化刚好相反，延迟初始化的bean在容器启动过程中不会创建，而是需要使用的时候才会去创建，
+	先说一下bean什么时候会被使用：
+	1.	被其他bean作为依赖进行注入的时候，比如通过property元素的ref属性进行引用，通过构造器注入、
+	通过set注入、通过自动注入，这些都会导致被依赖bean的创建
+	2.	开发者自己写代码向容器中查找bean的时候，如调用容器的getBean方法获取bean。
+	延迟bean的配置
+	在bean定义的时候通过lazy-init属性来配置bean是否是延迟加载，true：延迟初始化，false：实时初始化
+	<bean lazy-init="是否是延迟初始化" />
+	总结
+	延迟初始化的bean无法在程序启动过程中迅速发现bean定义的问题，
+	第一次获取的时候可能耗时会比较长。在实际工作中用的比较少，作为了解，以后碰到的时候会有个印象。
+Spring系列第13篇：使用继承简化bean配置(abstract & parent)
+	上面多了一个baseService的bean，这个bean没有指定class对象，但是多了一个abstract="true"的属性，
+	表示这个bean是抽象的，abstract为true的bean在spring容器中不会被创建，只是会将其当做bean定义的模板，
+	而serviceB和serviceC的定义中多了一个属性parent，用来指定当前bean的父bean名称，此处是baseService，
+	此时serviceB和serviceC会继承baseService中定义的配置信息。
+	子bean中也可以重新定义父bean中已经定义好的配置，这样子配置会覆盖父bean中的配置信息
+	总结
+	1.	bean元素的abstract属性为true的时候可以定义某个bean为一个抽象的bean，相当于定义了一个bean模板，
+	spring容器并不会创建这个bean，从容器中查找abstract为true的bean的时候，会报错BeanIsAbstractException异常
+	2.	bean元素的parent属性可以指定当前bean的父bean，子bean可以继承父bean中配置信息，
+	也可以自定义配置信息，这样可以覆盖父bean中的配置
+Spring系列第14篇：lookup-method和replaced-method
+	lookup-method：方法查找
+	通常情况下，我们使用的bean都是单例的，如果一个bean需要依赖于另一个bean的时候，
+	可以在当前bean中声明另外一个bean引用，然后注入依赖的bean，此时被依赖的bean在当前bean中自始至终都是同一个实例。
+	单例bean中使用多例bean：lookup-method方式实现
+	上面这种方式实现了单例bean中使用多例bean的需求，但是用到spring中的接口ApplicationContextAware，
+	此时对spring的api有耦合的作用，我们一直推行高内聚低耦合，所以我们得寻求更好的办法。
+	能不能有这样的功能，当serviceB中调用getServiceA的时候，系统自动将这个方法拦截，
+	然后去spring容器中查找对应的serviceA对象然后返回，spring中的lookup-method就可以实现这样的功能。
+	lookup-method：看其名字，就知道意思：方法查找，调用name属性指定的方法的时候，spring会对这个方法进行拦截，
+	然后去容器中查找lookup-method元素中bean属性指定的bean，然后将找到的bean作为方法的返回值返回。这个地方底层是使用cglib代理实现的
+	replaced-method：方法替换
+	replaced-method：方法替换，比如我们要调用serviceB中的getServiceA的时候，
+	我们可以对serviceB这个bean中的getServiceA方法进行拦截，把这个调用请求转发到一个替换者处理。
+	这就是replaced-method可以实现的功能，比lookup-method更强大更灵活。
+	总结
+	1.	lookup-method：方法查找，可以对指定的bean的方法进行拦截，然后从容器中查找指定的bean作为被拦截方法的返回值
+	2.	replaced-method：方法替换，可以实现bean方法替换的效果，整体来说比lookup-method更灵活一些
+	3.	单例bean中使用多例bean，本文中列出了3种方式，
+Spring系列第15篇：代理详解（java动态代理&CGLIB代理)
+	代理spring中用到的挺多的，比如上篇文章中的lookup-method和replaced-method，以及后面我们要学的aop、spring中的事务、
+	spring中解析@configuration注解等等，这些都是依靠代理来实现的
+	通用代理的2种实现：
+	1.	jdk动态代理
+	2.	cglib代理
+
+	jdk动态代理详解
+	jdk中为实现代理提供了支持，主要用到2个类：
+	java.lang.reflect.Proxy
+	java.lang.reflect.InvocationHandler
+	jdk自带的代理使用上面有个限制，只能为接口创建代理类，如果需要给具体的类创建代理类，需要用后面要说的cglib
+	getProxyClass方法
+	为指定的接口创建代理类，返回代理类的Class对象
+	public static Class<?> getProxyClass(ClassLoader loader,
+											 Class<?>... interfaces)
+	参数说明：
+	loader：定义代理类的类加载器
+	interfaces：指定需要实现的接口列表，创建的代理默认会按顺序实现interfaces指定的接口
+	newProxyInstance方法
+	创建代理类的实例对象
+	public static Object newProxyInstance(ClassLoader loader,
+											  Class<?>[] interfaces,
+											  InvocationHandler h)
+	这个方法先为指定的接口创建代理类，然后会生成代理类的一个实例，最后一个参数比较特殊，是InvocationHandler类型的，这个是个接口如下：
+	public Object invoke(Object proxy, Method method, Object[] args)
+			throws Throwable;
+	上面方法会返回一个代理对象，当调用代理对象的任何方法的时候，会就被InvocationHandler接口的invoke方法处理，
+	所以主要代码需要卸载invoke方法中，稍后会有案例细说。
+	isProxy方法
+	判断指定的类是否是一个代理类
+	public static boolean isProxyClass(Class<?> cl)
+	getInvocationHandler方法
+	获取代理对象的InvocationHandler对象
+	public static InvocationHandler getInvocationHandler(Object proxy)
+			throws IllegalArgumentException
+	Proxy使用注意
+	1.	jdk中的Proxy只能为接口生成代理类，如果你想给某个类创建代理类，那么Proxy是无能为力的，此时需要我们用到下面要说的cglib了。
+	2.	Proxy类中提供的几个常用的静态方法大家需要掌握
+	3.	通过Proxy创建代理对象，当调用代理对象任意方法时候，会被InvocationHandler接口中的invoke方法进行处理，这个接口内容是关键
+	cglib代理详解
+	什么是cglib
+	jdk动态代理只能为接口创建代理，使用上有局限性。实际的场景中我们的类不一定有接口，
+	此时如果我们想为普通的类也实现代理功能，我们就需要用到cglib来实现了。
+	cglib是一个强大、高性能的字节码生成库，它用于在运行时扩展Java类和实现接口；
+	本质上它是通过动态的生成一个子类去覆盖所要代理的类（非final修饰的类和方法）。
+	Enhancer可能是CGLIB中最常用的一个类，和jdk中的Proxy不同的是，Enhancer既能够代理普通的class，也能够代理接口。
+	Enhancer创建一个被代理对象的子类并且拦截所有的方法调用（包括从Object中继承的toString和hashCode方法）。
+	Enhancer不能够拦截final方法，例如Object.getClass()方法，这是由于Java final方法语义决定的。
+	基于同样的道理，Enhancer也不能对final类进行代理操作。
+	CGLIB作为一个开源项目，其代码托管在github，地址为：
+	https://github.com/cglib/cglib
+	CGLIB底层使用了ASM（一个短小精悍的字节码操作框架）来操作字节码生成新的类。
+	除了CGLIB库外，脚本语言（如Groovy和BeanShell）也使用ASM生成字节码。
+	ASM使用类似SAX的解析器来实现高性能。我们不鼓励直接使用ASM，因为它需要对Java字节码的格式足够的了解。
+	spring已将第三方cglib jar包中所有的类集成到spring自己的jar包中，
+	本系列内容都是和spring相关的，为了方便，我们直接使用spring内部已集成的来讲解
+	上面代码中的注释很详细，列出了给指定的类创建代理的具体步骤，整个过程中主要用到了Enhancer类和MethodInterceptor接口。
+	enhancer.setSuperclass用来设置代理类的父类，即需要给哪个类创建代理类，此处是Service1
+	enhancer.setCallback传递的是MethodInterceptor接口类型的参数，MethodInterceptor接口有个intercept方法，
+	这个方法会拦截代理对象所有的方法调用。
+	还有一个重点是Object result = methodProxy.invokeSuper(o, objects);可以调用被代理类，
+	也就是Service1类中的具体的方法，从方法名称的意思可以看出是调用父类，实际对某个类创建代理，
+	cglib底层通过修改字节码的方式为Service1类创建了一个子类。
+	CGLIB和Java动态代理的区别
+	1.	Java动态代理只能够对接口进行代理，不能对普通的类进行代理（因为所有生成的代理类的父类为Proxy，
+	Java类继承机制不允许多重继承）；CGLIB能够代理普通类；
+	2.	Java动态代理使用Java原生的反射API进行操作，在生成类上比较高效；
+	CGLIB使用ASM框架直接对字节码进行操作，在类的执行过程中比较高效
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
