@@ -583,6 +583,228 @@ Spring系列第15篇：代理详解（java动态代理&CGLIB代理)
 	Java类继承机制不允许多重继承）；CGLIB能够代理普通类；
 	2.	Java动态代理使用Java原生的反射API进行操作，在生成类上比较高效；
 	CGLIB使用ASM框架直接对字节码进行操作，在类的执行过程中比较高效
+Spring系列第16篇：深入理解java注解
+	代码中注释大家都熟悉吧，注释是给开发者看的，可以提升代码的可读性和可维护性，
+	但是对于java编译器和虚拟机来说是没有意义的，编译之后的字节码文件中是没有注释信息的；
+	而注解和注释有点类似，唯一的区别就是注释是给人看的，而注释是给编译器和虚拟机看的，
+	编译器和虚拟机在运行的过程中可以获取注解信息，然后可以根据这些注解的信息做各种想做的事情。
+	比如：大家对@Override应该比较熟悉，就是一个注解，加在方法上，标注当前方法重写了父类的方法，当编译器编译代码的时候，
+	会对@Override标注的方法进行验证，验证其父类中是否也有同样签名的方法，否则报错，通过这个注解是不是增强了代码的安全性。
+	总的来说：注解是对代码的一种增强，可以在代码编译或者程序运行期间获取注解的信息，然后根据这些信息做各种牛逼的事情
+	定义注解语法
+	jdk中注解相关的类和接口都定义在java.lang.annotation包中。
+	注解的定义和我们常见的类、接口类似，只是注解使用@interface来定义
+	注解中定义参数
+	注解有没有参数都可以，定义参数如下：
+	public @interface 注解名称{
+		[public] 参数类型 参数名称1() [default 参数默认值];
+		[public] 参数类型 参数名称2() [default 参数默认值];
+		[public] 参数类型 参数名称n() [default 参数默认值];
+	}
+	注解中可以定义多个参数，参数的定义有以下特点：
+	1.	访问修饰符必须为public，不写默认为public
+	2.	该元素的类型只能是基本数据类型、String、Class、枚举类型、注解类型（体现了注解的嵌套效果）以及上述类型的一位数组
+	3.	该元素的名称一般定义为名词，如果注解中只有一个元素，请把名字起为value（后面使用会带来便利操作）
+	4.	参数名称后面的()不是定义方法参数的地方，也不能在括号中定义任何参数，仅仅只是一个特殊的语法
+	5.	default代表默认值，值必须和第2点定义的类型一致
+	6.	如果没有默认值，代表后续使用注解时必须给该类型元素赋值
+	指定注解的使用范围：@Target
+	使用@Target注解定义注解的使用范围，如下：
+	@Target(value = {ElementType.TYPE,ElementType.METHOD})
+	public @interface MyAnnotation {
+	}
+	上面指定了MyAnnotation注解可以用在类、接口、注解类型、枚举类型以及方法上面，
+	自定义注解上也可以不使用@Target注解，如果不使用，表示自定义注解可以用在任何地方。
+	看一下@Target源码：
+	@Documented
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.ANNOTATION_TYPE)
+	public @interface Target {
+		ElementType[] value();
+	}
+	有一个参数value，是ElementType类型的一个数组，再来看一下ElementType，是个枚举，源码如下：
+	package java.lang.annotation;
+	/*注解的使用范围*/
+	public enum ElementType {
+		/*类、接口、枚举、注解上面*/
+		TYPE,
+		/*字段上*/
+		FIELD,
+		/*方法上*/
+		METHOD,
+		/*方法的参数上*/
+		PARAMETER,
+		/*构造函数上*/
+		CONSTRUCTOR,
+		/*本地变量上*/
+		LOCAL_VARIABLE,
+		/*注解上*/
+		ANNOTATION_TYPE,
+		/*包上*/
+		PACKAGE,
+		/*类型参数上*/
+		TYPE_PARAMETER,
+		/*类型名称上*/
+		TYPE_USE
+	}
+	指定注解的保留策略：@Retention
+	我们先来看一下java程序的3个过程
+	1.	源码阶段
+	2.	源码被编译为字节码之后变成class文件
+	3.	字节码被虚拟机加载然后运行
+	那么自定义注解会保留在上面哪个阶段呢？可以通过@Retention注解来指定，如：
+	@Retention(RetentionPolicy.SOURCE)
+	public @interface MyAnnotation {
+	}
+	上面指定了MyAnnotation只存在于源码阶段，后面的2个阶段都会丢失。
+	来看一下@Retention
+	@Documented
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.ANNOTATION_TYPE)
+	public @interface Retention {
+		RetentionPolicy value();
+	}
+	有一个value参数，类型为RetentionPolicy枚举，如下：
+	public enum RetentionPolicy {
+		/*注解只保留在源码中，编译为字节码之后就丢失了，也就是class文件中就不存在了*/
+		SOURCE,
+		/*注解只保留在源码和字节码中，运行阶段会丢失*/
+		CLASS,
+		/*源码、字节码、运行期间都存在*/
+		RUNTIME
+	}
+	使用注解
+	语法
+	将注解加载使用的目标上面，如下：
+	@注解名称(参数1=值1,参数2=值2,参数n=值n)
+	目标对象
+	为了运行时能准确获取到注解的相关信息，Java在java.lang.reflect 反射包下新增了AnnotatedElement接口，
+	它主要用于表示目前正在虚拟机中运行的程序中已使用注解的元素，通过该接口提供的方法可以利用反射技术地读取注解的信息
+	•	Package：用来表示包的信息
+	•	Class：用来表示类的信息
+	•	Constructor：用来表示构造方法信息
+	•	Field：用来表示类中属性信息
+	•	Method：用来表示方法信息
+	•	Parameter：用来表示方法参数信息
+	•	TypeVariable：用来表示类型变量信息，如：类上定义的泛型类型变量，方法上面定义的泛型类型变量
+	AnnotatedElement常用方法
+	fdsfd
+	返回值	方法名称	说明
+	<A extends Annotation>	getAnnotation(Class<A> annotationClass)	该元素如果存在指定类型的注解，则返回这些注解，否则返回 null。
+	Annotation[]	getAnnotations()	返回此元素上存在的所有注解，包括从父类继承的
+	boolean	isAnnotationPresent(Class<? extends Annotation> annotationClass)	如果指定类型的注解存在于此元素上，则返回 true，否则返回 false。
+	Annotation[]	getDeclaredAnnotations()	返回直接存在于此元素上的所有注解，注意，不包括父类的注解，
+	调用者可以随意修改返回的数组；这不会对其他调用者返回的数组产生任何影响，没有则返回长度为0的数组
+	@Inherit：实现类之间的注解继承
+	我们通过@Target元注解的属性值可以看出，这个@Inherited 是专门修饰注解的。
+	作用：让子类可以继承父类中被@Inherited修饰的注解，注意是继承父类中的，
+	如果接口中的注解也使用@Inherited修饰了，那么接口的实现类是无法继承这个注解的
+	想重复使用注解的时候，需要用到@Repeatable注解
+	Spring @AliasFor：对注解进行增强
+	@AliasFor(annotation = A14.class, value = "value")
+	这个相当于给某个注解指定别名，即将B1注解中a14Value参数作为A14中value参数的别名，
+	当给B1的a14Value设置值的时候，就相当于给A14的value设置值，有个前提是@AliasFor注解的annotation参数指定的注解需要加载当前注解上面，
+	AliasFor注解中value和attribute互为别名，随便设置一个，同时会给另外一个设置相同的值。
+	@AliasFor中不指定value和attribute
+	当@AliasFor中不指定value或者attribute的时候，自动将@AliasFor修饰的参数作为value和attribute的值，
+Spring系列第17篇：@Configration和@Bean注解
+	@Configuration注解
+	@Configuration这个注解可以加在类上，让这个类的功能等同于一个bean xml配置文件
+	@Configuration使用步骤：
+	1.	在类上使用@Configuration注解
+	2.	通过AnnotationConfigApplicationContext容器来加@Configuration注解修饰的类
+	@Bean注解
+	用法
+	这个注解类似于bean xml配置文件中的bean元素，用来在spring容器中注册一个bean。
+	@Bean注解用在方法上，表示通过方法来定义一个bean，默认将方法名称作为bean名称，将方法返回值作为bean对象，注册到spring容器中。
+	1.	对比最后3行，可以看出：有没有@Configuration注解，@Bean都会起效，都会将@Bean修饰的方法作为bean注册到容器中
+	2.	两个内容的第一行有点不一样，被@Configuration修饰的bean最后输出的时候带有EnhancerBySpringCGLIB的字样，
+	而没有@Configuration注解的bean没有Cglib的字样；有EnhancerBySpringCGLIB字样的说明这个bean被cglib处理过的，变成了一个代理对象。
+	被@Configuration修饰的类，spring容器中会通过cglib给这个类创建一个代理，代理会拦截所有被@Bean修饰的方法，
+	默认情况（bean为单例）下确保这些方法只被调用一次，从而确保这些bean是同一个bean，即单例的。
+	1.	@Configuration注解修饰的类，会被spring通过cglib做增强处理，通过cglib会生成一个代理对象，
+	代理会拦截所有被@Bean注解修饰的方法，可以确保一些bean是单例的
+	2.	不管@Bean所在的类上是否有@Configuration注解，都可以将@Bean修饰的方法作为一个bean注册到spring容器中
+Spring系列第18篇：@ComponentScan、@ComponentScans详解
+	@ComponentScan
+	@ComponentScan用于批量注册bean。
+	这个注解会让spring去扫描某些包及其子包中所有的类，然后将满足一定条件的类作为bean注册到spring容器容器中。
+	定义上可以看出此注解可以用在任何类型上面，不过我们通常将其用在类上面。
+	常用参数：
+	value：指定需要扫描的包，如：com.javacode2018
+	basePackages：作用同value；value和basePackages不能同时存在设置，可二选一
+	basePackageClasses：指定一些类，spring容器会扫描这些类所在的包及其子包中的类
+	nameGenerator：自定义bean名称生成器
+	resourcePattern：需要扫描包中的那些资源，默认是：*/\.class，即会扫描指定包中所有的class文件
+	useDefaultFilters：对扫描的类是否启用默认过滤器，默认为true
+	includeFilters：过滤器：用来配置被扫描出来的那些类会被作为组件注册到容器中
+	excludeFilters：过滤器，和includeFilters作用刚好相反，用来对扫描的类进行排除的，被排除的类不会被注册到容器中
+	lazyInit：是否延迟初始化被注册的bean
+	@ComponentScan工作的过程：
+	1.	Spring会扫描指定的包，且会递归下面子包，得到一批类的数组
+	2.	然后这些类会经过上面的各种过滤器，最后剩下的类会被注册到容器中
+	所以玩这个注解，主要关注2个问题：
+	第一个：需要扫描哪些包？通过value、backPackages、basePackageClasses这3个参数来控制
+	第二：过滤器有哪些？通过useDefaultFilters、includeFilters、excludeFilters这3个参数来控制过滤器
+	这两个问题搞清楚了，就可以确定哪些类会被注册到容器中。
+	默认情况下，任何参数都不设置的情况下，此时，会将@ComponentScan修饰的类所在的包作为扫描包；
+	默认情况下useDefaultFilters为true，这个为true的时候，spring容器内部会使用默认过滤器，规则是：
+	凡是类上有@Repository、@Service、@Controller、@Component这几个注解中的任何一个的，
+	那么这个类就会被作为bean注册到spring容器中，所以默认情况下，只需在类上加上这几个注解中的任何一个，
+	这些类就会自动交给spring容器来管理了。
+	value参数：被注册为bean的时候，用来指定bean的名称，如果不指定，默认为类名首字母小写。
+	@controller通常用来标注controller层组件，
+	@service注解标注service层的组件，
+	@Repository标注dao层的组件，这样可以让整个系统的结构更清晰，当看到这些注解的时候，会和清晰的知道属于哪个层，
+	对于spring来说，将这3个注解替换成@Component注解，对系统没有任何影响，产生的效果是一样的。
+	@ComponentScan({
+        "com.javacode2018.lesson001.demo22.test1.controller",
+        "com.javacode2018.lesson001.demo22.test1.service"
+	})
+	指定包名的方式扫描存在的一个隐患，若包被重名了，会导致扫描会失效，
+	一般情况下面我们使用basePackageClasses的方式来指定需要扫描的包，这个参数可以指定一些类型，
+	默认会扫描这些类所在的包及其子包中所有的类，这种方式可以有效避免这种问题。
+	@ComponentScan(basePackageClasses = ScanClass.class)
+	includeFilters的使用
+	用法
+	再来看一下includeFilters这个参数的定义：
+	Filter[] includeFilters() default {};
+	是一个Filter类型的数组，多个Filter之间为或者关系，即满足任意一个就可以了
+	Filter也是一个注解，参数：
+	type：过滤器的类型，是个枚举类型，5种类型
+	ANNOTATION：通过注解的方式来筛选候选者，即判断候选者是否有指定的注解
+	ASSIGNABLE_TYPE：通过指定的类型来筛选候选者，即判断候选者是否是指定的类型
+	ASPECTJ：ASPECTJ表达式方式，即判断候选者是否匹配ASPECTJ表达式
+	REGEX：正则表达式方式，即判断候选者的完整名称是否和正则表达式匹配
+	CUSTOM：用户自定义过滤器来筛选候选者，对候选者的筛选交给用户自己来判断
+
+	value：和参数classes效果一样，二选一
+	classes：3种情况如下
+	当type=FilterType.ANNOTATION时，通过classes参数可以指定一些注解，用来判断被扫描的类上是否有classes参数指定的注解
+	当type=FilterType.ASSIGNABLE_TYPE时，通过classes参数可以指定一些类型，用来判断被扫描的类是否是classes参数指定的类型
+	当type=FilterType.CUSTOM时，表示这个过滤器是用户自定义的，classes参数就是用来指定用户自定义的过滤器，自定义的过滤器需要实现org.springframework.core.type.filter.TypeFilter接口
+
+	pattern：2种情况如下
+	当type=FilterType.ASPECTJ时，通过pattern来指定需要匹配的ASPECTJ表达式的值
+	当type=FilterType.REGEX时，通过pattern来自正则表达式的值
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

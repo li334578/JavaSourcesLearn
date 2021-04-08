@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.DiAutowireByName$Service1">
+        <property name="serviceName" value="类型注入Service1"/>
+    </bean>
+    <bean class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.DiAutowireByName$Service2">
+        <property name="serviceName" value="类型注入Service2"/>
+    </bean>
+    <bean id="autowire3" autowire="byType"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.DiAutowireByType"/>
+</beans>

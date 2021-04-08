@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-autowire="byName">
+    <bean id="service1" class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.DiAutowireByName.Service1">
+        <property name="serviceName" value="defaultNameService1"/>
+    </bean>
+
+    <bean id="service2" class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.DiAutowireByName.Service2">
+        <property name="serviceName" value="defaultNameService2"/>
+    </bean>
+    <bean id="service2_1" class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.DiAutowireByName.Service2">
+        <property name="serviceName" value="defaultNameService2_1"/>
+    </bean>
+
+    <bean id="autowireByDefault1" autowire="default"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.DiAutowireByName"/>
+    <bean id="autowireByDefault2" autowire="default"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.DiAutowireByName">
+        <property name="service2" ref="service2_1"/>
+    </bean>
+
+
+</beans>

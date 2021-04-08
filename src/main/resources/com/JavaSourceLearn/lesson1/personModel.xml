@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="personModelIndex1"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.PersonModel">
+        <constructor-arg index="0" value="索引注入1"/>
+    </bean>
+
+    <bean id="personModelIndex2" class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.PersonModel">
+        <constructor-arg index="0" value="索引注入2"/>
+        <constructor-arg index="1" value="2"/>
+    </bean>
+    <bean id="personModelIndex3" class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.PersonModel">
+        <constructor-arg index="0" value="索引注入3"/>
+        <constructor-arg index="1" value="3"/>
+        <constructor-arg index="2" value="索引注入三个参数"/>
+    </bean>
+
+    <bean id="diByConstructorParamType1"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.PersonModel">
+        <constructor-arg type="java.lang.String" value="类型注入名字"/>
+        <constructor-arg type="java.lang.Integer" value="1"/>
+    </bean>
+
+    <bean id="diByConstructorParamType2"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.PersonModel">
+        <constructor-arg type="java.lang.String" value="类型注入名字"/>
+        <constructor-arg type="java.lang.String" value="类型注入描述"/>
+        <constructor-arg type="java.lang.Integer" value="1"/>
+    </bean>
+
+    <bean id="diByConstructorParamName1"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.PersonModel">
+        <constructor-arg name="name" value="名字1"/>
+    </bean>
+    <bean id="diByConstructorParamName2"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.PersonModel">
+        <constructor-arg name="name" value="名字2"/>
+        <constructor-arg name="age" value="2"/>
+    </bean>
+    <bean id="diByConstructorParamName3"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.PersonModel">
+        <constructor-arg name="name" value="名字3"/>
+        <constructor-arg name="age" value="3"/>
+        <constructor-arg name="description" value="描述"/>
+    </bean>
+
+    <bean id="diBySetter1" class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.MenuModel">
+        <property name="meanName" value="菜单1"/>
+    </bean>
+    <bean id="diBySetter2" class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.MenuModel">
+        <property name="theSort" value="1"/>
+    </bean>
+    <bean id="diBySetter3" class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.MenuModel">
+        <property name="meanName" value="菜单3"/>
+        <property name="theSort" value="3"/>
+    </bean>
+
+    <bean id="idObjectBean1" class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.PeopleModel"/>
+    <bean id="idObjectBean2" class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.PeopleModel">
+        <property name="className" value="1班"/>
+        <property name="person">
+            <bean class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.Person">
+                <property name="id" value="1001"/>
+                <property name="name" value="张三"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="person1" class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.Person">
+        <property name="id" value="1002"/>
+        <property name="name" value="李四"/>
+    </bean>
+
+    <bean id="idObjectBean3" class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.PeopleModel">
+        <property name="className" value="2班"/>
+        <property name="person" ref="person1"/>
+    </bean>
+
+    <bean id="diOtherProperties"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.DiOtherTypeModel">
+        <property name="listProperties">
+            <list>
+                <value>spring</value>
+                <value>springBoot</value>
+                <value>springCloud</value>
+            </list>
+        </property>
+        <property name="personProperties">
+            <set>
+                <bean class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.Person">
+                    <property name="id" value="1003"/>
+                    <property name="name" value="王五"/>
+                </bean>
+                <ref bean="person1"/>
+            </set>
+        </property>
+        <property name="mapProperties">
+            <map>
+                <entry key="k1" value="v1"/>
+                <entry key="k2" value="v2"/>
+                <entry key="k3" value="v3"/>
+            </map>
+        </property>
+        <property name="arrayProperties">
+            <array>
+                <value>1</value>
+                <value>3</value>
+                <value>5</value>
+            </array>
+        </property>
+        <property name="properties">
+            <props>
+                <prop key="key1">123</prop>
+                <prop key="key2">456</prop>
+                <prop key="key3">789</prop>
+            </props>
+        </property>
+    </bean>
+</beans>

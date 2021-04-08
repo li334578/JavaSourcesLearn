@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean autowire-candidate="false"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.PrimaryBean.ServiceA"/>
+    <bean class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.PrimaryBean.ServiceB"/>
+
+    <bean class="com.company.JavaSourceLearn.springLearn.module.lesson1.bean.PrimaryBean" autowire="byType"/>
+</beans>
