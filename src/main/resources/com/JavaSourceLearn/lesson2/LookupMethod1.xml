@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--  serviceA是多例的  -->
+    <bean id="serviceA" scope="prototype"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson2.bean2.ServiceA"/>
+    <!--  serviceB默认单例  -->
+    <bean id="serviceB" class="com.company.JavaSourceLearn.springLearn.module.lesson2.bean2.ServiceB">
+        <property name="serviceA" ref="serviceA"/>
+    </bean>
+    <!--  serviceC默认单例  -->
+    <bean id="serviceC" class="com.company.JavaSourceLearn.springLearn.module.lesson2.bean2.ServiceC">
+        <property name="serviceA" ref="serviceA"/>
+    </bean>
+
+    <!--  serviceD默认单例  -->
+    <bean id="serviceD" class="com.company.JavaSourceLearn.springLearn.module.lesson2.bean2.ServiceD">
+        <lookup-method name="getServiceA" bean="serviceA"/>
+    </bean>
+
+    <bean id="serviceEMethodReplacer"
+          class="com.company.JavaSourceLearn.springLearn.module.lesson2.bean2.ServiceEMethodReplacer"/>
+
+    <!--  serviceE默认单例  -->
+    <bean id="serviceE" class="com.company.JavaSourceLearn.springLearn.module.lesson2.bean2.ServiceE">
+        <replaced-method name="getServiceA" replacer="serviceEMethodReplacer"/>
+    </bean>
+
+</beans>
