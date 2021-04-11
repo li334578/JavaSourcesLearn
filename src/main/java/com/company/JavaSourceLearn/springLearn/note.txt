@@ -782,11 +782,196 @@ Spring系列第18篇：@ComponentScan、@ComponentScans详解
 	classes：3种情况如下
 	当type=FilterType.ANNOTATION时，通过classes参数可以指定一些注解，用来判断被扫描的类上是否有classes参数指定的注解
 	当type=FilterType.ASSIGNABLE_TYPE时，通过classes参数可以指定一些类型，用来判断被扫描的类是否是classes参数指定的类型
-	当type=FilterType.CUSTOM时，表示这个过滤器是用户自定义的，classes参数就是用来指定用户自定义的过滤器，自定义的过滤器需要实现org.springframework.core.type.filter.TypeFilter接口
+	当type=FilterType.CUSTOM时，表示这个过滤器是用户自定义的，classes参数就是用来指定用户自定义的过滤器，
+	自定义的过滤器需要实现org.springframework.core.type.filter.TypeFilter接口
 
 	pattern：2种情况如下
 	当type=FilterType.ASPECTJ时，通过pattern来指定需要匹配的ASPECTJ表达式的值
 	当type=FilterType.REGEX时，通过pattern来自正则表达式的值
+	MetadataReader接口
+	类元数据读取器，可以读取一个类上的任意信息，如类上面的注解信息、类的磁盘路径信息、类的class对象的各种信息，
+	spring进行了封装，提供了各种方便使用的方法。
+	MetadataReaderFactory接口
+	类元数据读取器工厂，可以通过这个类获取任意一个类的MetadataReader对象
+	useDefaultFilters = false, //不启用默认过滤器
+	@CompontentScan注解是被下面这个类处理的
+	org.springframework.context.annotation.ConfigurationClassPostProcessor
+	这个类非常非常关键，主要用户bean的注册，前面我们介绍的@Configuration,@Bean注解也是被这个类处理的。
+	还有下面这些注解：
+	@PropertySource
+	@Import
+	@ImportResource
+	@Compontent
+	以上这些注解都是被ConfigurationClassPostProcessor这个类处理的，内部会递归处理这些注解，完成bean的注册。
+	以@CompontentScan来说一下过程，第一次扫描之后会得到一批需要注册的类，然后会对这些需要注册的类进行遍历，
+	判断是否有上面任意一个注解，如果有，会将这个类交给ConfigurationClassPostProcessor继续处理，直到递归完成所有bean的注册。
+	
+	1.	@ComponentScan用于批量注册bean，spring会按照这个注解的配置，递归扫描指定包中的所有类，将满足条件的类批量注册到spring容器中
+	2.	可以通过value、basePackages、basePackageClasses 这几个参数来配置包的扫描范围
+	3.	可以通过useDefaultFilters、includeFilters、excludeFilters这几个参数来配置类的过滤器，被过滤器处理之后剩下的类会被注册到容器中
+	4.	指定包名的方式配置扫描范围存在隐患，包名被重命名之后，会导致扫描实现，所以一般我们在需要扫描的包中可以创建一个标记的接口或者类，作为basePackageClasses的值，通过这个来控制包的扫描范围
+	5.	@CompontScan注解会被ConfigurationClassPostProcessor类递归处理，最终得到所有需要注册的类。
+Spring系列第19篇：@Import批量注册bean
+	@Import使用
+	先看Spring对它的注释，总结下来作用就是和xml配置的 <import />标签作用一样，
+	允许通过它引入@Configuration标注的类 ， 引入ImportSelector接口和ImportBeanDefinitionRegistrar接口的实现，
+	也包括 @Component注解的普通类。
+	总的来说：@Import可以用来批量导入需要注册的各种类，如普通的类、配置类，完后完成普通类和配置类中所有bean的注册。
+	@Import可以使用在任何类型上，通常情况下，类和注解上用的比较多。
+	value：一个Class数组，设置需要导入的类，可以是@Configuration标注的列，
+	可以是ImportSelector接口或者ImportBeanDefinitionRegistrar接口类型的，或者需要导入的普通组件类
+	使用步骤
+	1.	将@Import标注在类上，设置value参数
+	2.	将@Import标注的类作为AnnotationConfigApplicationContext构造参数创建AnnotationConfigApplicationContext对象
+	3.	使用AnnotationConfigApplicationContext对象
+	@Import的value常见的有5种用法
+	1.	value为普通的类
+	2.	value为@Configuration标注的类
+	3.	value为@CompontentScan标注的类
+	4.	value为ImportBeanDefinitionRegistrar接口类型
+	5.	value为ImportSelector接口类型
+	6.	value为DeferredImportSelector接口类型
+	按模块的方式进行导入，需要哪个导入哪个，不需要的时候，直接修改一下总的配置类，调整一下@Import就可以了，非常方便。
+	value为@Configuration标注的配置类
+	项目比较大的情况下，会按照模块独立开发，每个模块在maven中就表现为一个个的构建，然后通过坐标的方式进行引入需要的模块。
+	value为@CompontentScan标注的类
+	项目中分多个模块，每个模块有各自独立的包，我们在每个模块所在的包中配置一个@CompontentScan类，然后通过@Import来导入需要启用的模块。
+	ImportBeanDefinitionRegistrar接口
+	这个接口提供了通过spring容器api的方式直接向容器中注册bean。
+	接口的完整名称：
+	org.springframework.context.annotation.ImportBeanDefinitionRegistrar
+	源码：
+	public interface ImportBeanDefinitionRegistrar {
+
+		default void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry,
+				BeanNameGenerator importBeanNameGenerator) {
+
+			registerBeanDefinitions(importingClassMetadata, registry);
+		}
+
+		default void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
+		}
+
+	}
+	2个默认方法，都可以用来调用spring容器api来注册bean。
+	2个方法中主要有3个参数
+	importingClassMetadata
+	AnnotationMetadata类型的，通过这个可以获取被@Import注解标注的类所有注解的信息。
+	registry
+	BeanDefinitionRegistry类型，是一个接口，内部提供了注册bean的各种方法。
+	importBeanNameGenerator
+	BeanNameGenerator类型，是一个接口，内部有一个方法，用来生成bean的名称。
+	关于BeanDefinitionRegistry和BeanNameGenerator接口在来细说一下。
+	BeanDefinitionRegistry接口：bean定义注册器
+	bean定义注册器，提供了bean注册的各种方法，来看一下源码：
+	public interface BeanDefinitionRegistry extends AliasRegistry {
+
+		/**
+		 * 注册一个新的bean定义
+		 * beanName：bean的名称
+		 * beanDefinition：bean定义信息
+		 */
+		void registerBeanDefinition(String beanName, BeanDefinition beanDefinition)
+				throws BeanDefinitionStoreException;
+
+		/**
+		 * 通过bean名称移除已注册的bean
+		 * beanName：bean名称
+		 */
+		void removeBeanDefinition(String beanName) throws NoSuchBeanDefinitionException;
+
+		/**
+		 * 通过名称获取bean的定义信息
+		 * beanName：bean名称
+		 */
+		BeanDefinition getBeanDefinition(String beanName) throws NoSuchBeanDefinitionException;
+
+		/**
+		 * 查看beanName是否注册过
+		 */
+		boolean containsBeanDefinition(String beanName);
+
+		/**
+		 * 获取已经定义（注册）的bean名称列表
+		 */
+		String[] getBeanDefinitionNames();
+
+		/**
+		 * 返回注册器中已注册的bean数量
+		 */
+		int getBeanDefinitionCount();
+
+		/**
+		 * 确定给定的bean名称或者别名是否已在此注册表中使用
+		 * beanName：可以是bean名称或者bean的别名
+		 */
+		boolean isBeanNameInUse(String beanName);
+
+	}
+	基本上所有bean工厂都实现了这个接口，让bean工厂拥有bean注册的各种能力。
+	上面我们用到的AnnotationConfigApplicationContext类也实现了这个接口。
+	BeanNameGenerator接口：bean名称生成器
+	bean名称生成器，这个接口只有一个方法，用来生成bean的名称：
+	public interface BeanNameGenerator {
+		String generateBeanName(BeanDefinition definition, BeanDefinitionRegistry registry);
+	}
+	spring内置了3个实现
+	DefaultBeanNameGenerator
+	默认bean名称生成器，xml中bean未指定名称的时候，默认就会使用这个生成器，默认为：完整的类名#bean编号
+	AnnotationBeanNameGenerator
+	注解方式的bean名称生成器，比如通过@Component(bean名称)的方式指定bean名称，如果没有通过注解方式指定名称，默认会将完整的类名作为bean名称。
+	FullyQualifiedAnnotationBeanNameGenerator
+	将完整的类名作为bean的名称
+	BeanDefinition接口：bean定义信息
+	用来表示bean定义信息的接口，我们向容器中注册bean之前，会通过xml或者其他方式定义bean的各种配置信息，
+	bean的所有配置信息都会被转换为一个BeanDefinition对象，然后通过容器中BeanDefinitionRegistry接口中的方法，
+	将BeanDefinition注册到spring容器中，完成bean的注册操作。
+	value为ImportBeanDefinitionRegistrar接口类型
+	用法（4个步骤）
+	1. 定义ImportBeanDefinitionRegistrar接口实现类，在registerBeanDefinitions方法中使用registry来注册bean
+	2. 使用@Import来导入步骤1中定义的类
+	3. 使用步骤2中@Import标注的类作为AnnotationConfigApplicationContext构造参数创建spring容器
+	4. 使用AnnotationConfigApplicationContext操作bean
+	DeferredImportSelector接口
+	DeferredImportSelector是ImportSelector的子接口，既然是ImportSelector的子接口，
+	所以也可以通过@Import进行导入，这个接口和ImportSelector不同地方有两点：
+	1.	延迟导入
+	2.	指定导入的类的处理顺序
+	延迟导入
+	比如@Import的value包含了多个普通类、多个@Configuration标注的配置类、多个ImportSelector接口的实现类，
+	多个ImportBeanDefinitionRegistrar接口的实现类，还有DeferredImportSelector接口实现类，
+	此时spring处理这些被导入的类的时候，会将DeferredImportSelector类型的放在最后处理，
+	会先处理其他被导入的类，其他类会按照value所在的前后顺序进行处理。
+	那么我们是可以做很多事情的，比如我们可以在DeferredImportSelector导入的类中判断一下容器中是否已经注册了某个bean，
+	如果没有注册过，那么再来注册。
+	以后我们会讲到另外一个注解@Conditional，这个注解可以按条件来注册bean，
+	比如可以判断某个bean不存在的时候才进行注册，某个类存在的时候才进行注册等等各种条件判断，
+	通过@Conditional来结合DeferredImportSelector可以做很多事情。
+	总结
+	1.	@Import可以用来批量导入任何普通的组件、配置类，将这些类中定义的所有bean注册到容器中
+	2.	@Import常见的5种用法需要掌握
+	3.	掌握ImportSelector、ImportBeanDefinitionRegistrar、DeferredImportSelector的用法
+	4.	DeferredImportSelector接口可以实现延迟导入、按序导入的功能
+	5.	spring中很多以@Enable开头的都是使用@Import集合ImportSelector方式实现的
+	6.	BeanDefinitionRegistry接口：bean定义注册器，这个需要掌握常见的方法
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
 
 
 
