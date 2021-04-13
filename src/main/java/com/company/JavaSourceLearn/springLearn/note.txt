@@ -954,6 +954,12 @@ Spring系列第19篇：@Import批量注册bean
 	4.	DeferredImportSelector接口可以实现延迟导入、按序导入的功能
 	5.	spring中很多以@Enable开头的都是使用@Import集合ImportSelector方式实现的
 	6.	BeanDefinitionRegistry接口：bean定义注册器，这个需要掌握常见的方法
+Spring系列第20篇：@Conditional通过条件来控制bean的注册
+	@Conditional注解
+	@Conditional注解是从spring4.0才有的，可以用在任何类型或者方法上面，通过@Conditional注解可以配置一些条件判断，
+	当所有条件都满足的时候，被@Conditional标注的目标才会被spring容器处理。
+	
+
 
 
 
