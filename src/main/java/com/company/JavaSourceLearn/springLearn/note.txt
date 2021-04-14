@@ -958,7 +958,100 @@ Spring系列第20篇：@Conditional通过条件来控制bean的注册
 	@Conditional注解
 	@Conditional注解是从spring4.0才有的，可以用在任何类型或者方法上面，通过@Conditional注解可以配置一些条件判断，
 	当所有条件都满足的时候，被@Conditional标注的目标才会被spring容器处理。
+Spring系列第21篇：注解实现依赖注入（@Autowired、@Resource、@Primary、@Qulifier）
+	@Autowired：注入依赖对象
+	作用
+	实现依赖注入，spring容器会对bean中所有字段、方法进行遍历，标注有@Autowired注解的，都会进行注入。
+	参数：
+	required：标注的对象是否必须注入，可能这个对象在容器中不存在，如果为true的时候，
+	找不到匹配的候选者就会报错，为false的时候，找不到也没关系 。
+	@Autowired查找候选者可以简化为下面这样
+	按类型找->通过限定符@Qualifier过滤->@Primary->@Priority->根据名称找（字段名称或者参数名称）
+	概括为：先按类型找，然后按名称找
+	@Resource：注意依赖对象
+	作用
+	和@Autowired注解类似，也是用来注入依赖的对象的，spring容器会对bean中所有字段、方法进行遍历，标注有@Resource注解的，都会进行注入。
+	这个注解是javax中定义的，并不是spring中定义的注解。
+	从定义上可以见，这个注解可以用在任何类型上面、字段、方法上面。
+	注意点：
+	用在方法上的时候，方法参数只能有一个
+	@Qualifier：限定符
+	作用
+	这个单词的意思是：限定符。
+	可以在依赖注入查找候选者的过程中对候选者进行过滤。
+	@Primary：设置为主要候选者
+	注入依赖的过程中，当有多个候选者的时候，可以指定哪个候选者为主要的候选者。
+Spring系列第22篇：@Scope、@DependsOn、@ImportResource、@Lazy
+	@Scope：指定bean的作用域
+	@Scope用来配置bean的作用域，等效于bean xml中的bean元素中的scope属性。
+	@DependsOn：指定当前bean依赖的bean
+	@DependsOn等效于bean xml中的bean元素中的depend-on属性。
+	spring在创建bean的时候，如果bean之间没有依赖关系，那么spring容器很难保证bean实例创建的顺序，
+	如果想确保容器在创建某些bean之前，需要先创建好一些其他的bean，可以通过@DependsOn来实现，
+	@DependsOn可以指定当前bean依赖的bean，通过这个可以确保@DependsOn指定的bean在当前bean创建之前先创建好
+	@ImportResource：配置类中导入bean定义的配置文件
+	有些项目，前期可能采用xml的方式配置bean，后期可能想采用spring注解的方式来重构项目，
+	但是有些老的模块可能还是xml的方式，spring为了方便在注解方式中兼容老的xml的方式，
+	提供了@ImportResource注解来引入bean定义的配置文件。
+	通常将其用在配置类上。
+	有3个参数：
+	•	value和locations效果一样，只能配置其中一个，是一个string类型的数组，用来指定需要导入的配置文件的路径。
+	•	reader：用来指定bean定义的读取器，目前我们知道的配置bean的方式有xml文件的方式，注解的方式，
+	其实还有其他的方式，比如properties文件的方式，如果用其他的方式，你得告诉spring具体要用那种解析器去解析这个bean配置文件
+	这个解析器就是BeanDefinitionReader，以后我们讲BeanDefinition的时候再细说
+	资源文件路径的写法
+	通常我们的项是采用maven来组织的，配置文件一般会放在resources目录，这个目录中的文件被编译之后会在target/classes目录中。
+	spring中资源文件路径最常用的有2种写法：
+	1.	以classpath:开头：检索目标为当前项目的classes目录
+	2.	以classpath*:开头：检索目标为当前项目的classes目录，以及项目中所有jar包中的目录，
+	如果你确定jar不是检索目标，就不要用这种方式，由于需要扫描所有jar包，所以速度相对于第一种会慢一些
+	那我们再来说classpath:和classpath*:后面的部分，后面的部分是确定资源文件的位置地方
+	相对路径的方式
+	classpath:com/javacode2018/lesson001/demo27/test5/beans.xml
+	或者
+	classpath*:com/javacode2018/lesson001/demo27/test5/beans.xml
+	/：绝对路径的方式
+	classpath:/com/javacode2018/lesson001/demo27/test5/beans.xml
+	*：文件通配符的方式
+	classpath:/com/javacode2018/lesson001/demo27/test5/beans-*.xml
+	会匹配test5目录中所有以beans-开头的xml结尾的文件
+	*：目录通配符的方式
+	classpath:/com/javacode2018/lesson001/demo27/*/beans-*.xml
+	会匹配demo27中所有子目录中所有以beans-开头的xml结尾的文件，注意这个地方只包含demo27的子目录，不包含子目录的子目录，不会进行递归
+	**：递归任意子目录的方式
+	classpath:/com/javacode2018/**/beans-*.xml
+	**会递归当前目录以及下面任意级的子目录
+	@Lazy：延迟初始化
+	用法
+	@Lazy等效于bean xml中bean元素的lazy-init属性，可以实现bean的延迟初始化。
+	所谓延迟初始化：就是使用到的时候才会去进行初始化。
+	常用3种方式
+	1.	和@Compontent一起标注在类上，可以是这个类延迟初始化
+	2.	和@Configuration一起标注在配置类中，可以让当前配置类中通过@Bean注册的bean延迟初始化
+	3.	和@Bean一起使用，可以使当前bean延迟初始化
+	------------------------
+	1.	@Scope：用来定义bean 的作用域；2种用法：第1种：标注在类上；第2种：和@Bean一起标注在方法上
+	2.	@DependsOn：用来指定当前bean依赖的bean，可以确保在创建当前bean之前，先将依赖的bean创建好；
+	2种用法：第1种：标注在类上；第2种：和@Bean一起标注在方法上
+	3.	@ImportResource：标注在配置类上，用来引入bean定义的配置文件
+	4.	@Lazy：让bean延迟初始化；常见3种用法：
+	第1种：标注在类上；第2种：标注在配置类上，会对配置类中所有的@Bean标注的方法有效；第3种：和@Bean一起标注在方法上
+Spring系列第23篇：Bean生命周期详解
 	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
