@@ -1077,6 +1077,20 @@ Spring系列第23篇：Bean生命周期详解
 	autowireCandidate（是否是候选对象）、primary（是否是主要的候选者）等信息。
 	BeanDefinition接口：bean定义信息接口
 	bean注册者只识别BeanDefinition对象，不管什么方式最后都会将这些bean定义的信息转换为BeanDefinition对象，然后注册到spring容器中
+	
+	阶段2：Bean元信息解析阶段
+	Bean元信息的解析就是将各种方式定义的bean配置信息解析为BeanDefinition对象。
+	XML方式解析：XmlBeanDefinitionReader
+	spring中提供了一个类XmlBeanDefinitionReader，将xml中定义的bean解析为BeanDefinition对象。
+	properties文件定义bean的解析：PropertiesBeanDefinitionReader
+	spring中提供了一个类XmlBeanDefinitionReader，将xml中定义的bean解析为BeanDefinition对象，过程和xml的方式类似。
+	注解方式：PropertiesBeanDefinitionReader
+	注解的方式定义的bean，需要使用PropertiesBeanDefinitionReader这个类来进行解析
+	
+
+
+
+
 
 
 
