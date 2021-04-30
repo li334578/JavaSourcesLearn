@@ -1087,6 +1087,72 @@ Spring系列第23篇：Bean生命周期详解
 	注解方式：PropertiesBeanDefinitionReader
 	注解的方式定义的bean，需要使用PropertiesBeanDefinitionReader这个类来进行解析
 	
+	阶段3：Spring Bean注册阶段
+	bean注册阶段需要用到一个非常重要的接口：BeanDefinitionRegistry
+	别名注册接口：AliasRegistry
+	BeanDefinitionRegistry接口继承了AliasRegistry接口，这个接口中定义了操作bean别名的一些方法
+	BeanDefinitionRegistry唯一实现：DefaultListableBeanFactory
+从阶段4到阶段14，也就是从：BeanDefinition合并阶段到Bean初始化完成阶段，都是在调用getBean从容器中获取bean对象的过程中发送的操作
+    阶段4：合并阶段
+	合并阶段是做什么的？
+	可能我们定义bean的时候有父子bean关系，此时子BeanDefinition中的信息是不完整的，
+	比如设置属性的时候配置在父BeanDefinition中，此时子BeanDefinition中是没有这些信息的，
+	需要将子bean的BeanDefinition和父bean的BeanDefinition进行合并，得到最终的一个RootBeanDefinition，
+	合并之后得到的RootBeanDefinition包含bean定义的所有信息，包含了从父bean中继继承过来的所有信息，
+	后续bean的所有创建工作就是依靠合并之后BeanDefinition来进行的
+	bean定义可能存在多级父子关系，合并的时候进进行递归合并，最终得到一个包含完整信息的RootBeanDefinition
+	阶段5：Bean Class加载阶段
+	这个阶段就是将bean的class名称转换为Class类型的对象。
+	BeanDefinition中有个Object类型的字段：beanClass
+	private volatile Object beanClass;
+	用来表示bean的class对象，通常这个字段的值有2种类型，一种是bean对应的Class类型的对象，
+	另一种是bean对应的Class的完整类名，
+	第一种情况不需要解析，第二种情况：即这个字段是bean的类名的时候，就需要通过类加载器将其转换为一个Class对象。
+	此时会对阶段4中合并产生的RootBeanDefinition中的beanClass进行解析，将bean的类名转换为Class对象，然后赋值给beanClass字段。
+	得到了Bean Class对象以及合并之后的BeanDefinition，下面就开始进入实例化这个对象的阶段了。
+	Bean实例化分为3个阶段：前阶段、实例化阶段、后阶段
+	阶段6：Bean实例化阶段
+	分2个小的阶段
+	1.	Bean实例化前操作
+	2.	Bean实例化操作
+	Bean实例化前操作
+	先来看一下DefaultListableBeanFactory，这个类中有个非常非常重要的字段：
+	private final List<BeanPostProcessor> beanPostProcessors = new CopyOnWriteArrayList<>();
+	是一个BeanPostProcessor类型的集合
+	BeanPostProcessor是一个接口，还有很多子接口，这些接口中提供了很多方法，spring在bean生命周期的不同阶段，
+	会调用上面这个列表中的BeanPostProcessor中的一些方法，来对生命周期进行扩展，
+	bean生命周期中的所有扩展点都是依靠这个集合中的BeanPostProcessor来实现的，所以如果大家想对bean的生命周期进行干预，这块一定要掌握好。
+	注意：本文中很多以BeanPostProcessor结尾的，都实现了BeanPostProcessor接口，有些是直接实现的，有些是实现了它的子接口。
+	上面代码中轮询beanPostProcessors列表，如果类型是InstantiationAwareBeanPostProcessor， 尝试调用InstantiationAwareBeanPostProcessor#postProcessBeforeInstantiation获取bean的实例对象，如果能够获取到，那么将返回值作为当前bean的实例，那么spring自带的实例化bean的过程就被跳过了。
+	postProcessBeforeInstantiation方法如下：
+	default Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
+		return null;
+	}
+	这个地方给开发者提供了一个扩展点，允许开发者在这个方法中直接返回bean的一个实例。
+	Bean实例化操作
+	这个过程会通过反射来调用bean的构造器来创建bean的实例。
+	具体需要使用哪个构造器，spring为开发者提供了一个接口，允许开发者自己来判断用哪个构造器。
+	看一下这块的代码逻辑：
+	for (BeanPostProcessor bp : getBeanPostProcessors()) {
+		if (bp instanceof SmartInstantiationAwareBeanPostProcessor) {
+			SmartInstantiationAwareBeanPostProcessor ibp = (SmartInstantiationAwareBeanPostProcessor) bp;
+			Constructor<?>[] ctors = ibp.determineCandidateConstructors(beanClass, beanName);
+			if (ctors != null) {
+				return ctors;
+			}
+		}
+	}
+	会调用SmartInstantiationAwareBeanPostProcessor接口的determineCandidateConstructors方法，这个方法会返回候选的构造器列表，也可以返回空
+	可以将@Autowired标注的方法作为候选构造器返回
+	
+
+
+
+
+
+
+
+
 
 
 
