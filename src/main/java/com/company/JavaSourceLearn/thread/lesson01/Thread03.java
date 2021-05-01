@@ -1,4 +1,4 @@
-package com.company.JavaSourceLearn.thread;
+package com.company.JavaSourceLearn.thread.lesson01;
 
 /**
  * @author : LiWenBo
