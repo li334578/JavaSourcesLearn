@@ -180,6 +180,10 @@ public class DynamicArray<T> {
      * 清空数组
      */
     public void clear() {
+        // 取消对象引用
+        for (int i = 0; i < size; i++) {
+            elements[i] = null;
+        }
         size = 0;
     }
 
