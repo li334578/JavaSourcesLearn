@@ -24,7 +24,6 @@ public class Matchmaker extends Person implements Action {
         System.out.println(p1.getName() + "通过" + this.getName() + "对" + p2.getName() + "表白");
     }
 
-    @Override
     public void showName() {
 
     }
