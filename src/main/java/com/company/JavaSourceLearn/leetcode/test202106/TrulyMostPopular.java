@@ -37,7 +37,8 @@ public class TrulyMostPopular {
                 "(Iidh,Qvjp)", "(Dnsay,Rngl)", "(Qweye,Tlv)", "(Wzyyim,Kxutz)", "(Hvueqc,Qejo)", "(Tlv,Ghc)", "(Hvia,Fvkhz)",
                 "(Msyr,Owk)", "(Hrschk,Hljt)", "(Owh,Gbclj)", "(Dwifi,Uzgx)", "(Iidh,Fpaf)", "(Iidh,Meutux)", "(Txixz,Ghc)",
                 "(Gbclj,Qsc)", "(Kgabb,Tuvzkd)", "(Uwjsu,Grqrg)", "(Vbp,Dwayf)", "(Xxmsn,Chhmx)", "(Uxf,Uzgx)"};
-        t.trulyMostPopular(names, synonyms);
+        String[] strings = t.trulyMostPopular(names, synonyms);
+        System.out.println(Arrays.toString(strings));
     }
 
     /**
@@ -65,13 +66,30 @@ public class TrulyMostPopular {
                 String key1 = matcher.group(1);
                 String key2 = matcher.group(2);
                 if (compare(key1, key2) > 0) {
-                    h1.put(key1, key2);
+                    if (h1.containsKey(key1)) {
+                        if (compare(h1.get(key1), key2) < 0) {
+                            h1.put(key2, h1.get(key1));
+                        } else {
+                            h1.put(h1.get(key1), key2);
+                        }
+                    } else {
+                        h1.put(key1, key2);
+                    }
                 } else {
-                    h1.put(key2, key1);
+                    if (h1.containsKey(key2)) {
+                        if (compare(h1.get(key2), key1) < 0) {
+                            h1.put(key1, h1.get(key2));
+                        } else {
+                            h1.put(h1.get(key2), key1);
+                        }
+                    } else {
+                        h1.put(key2, key1);
+                    }
                 }
             }
             return h1;
         }, (k1, k2) -> k1);
+        synonymsMap.forEach((k, v) -> System.out.println(k + "：" + v));
         // Jon John  John Johnny   Chris Kris   Chris Christopher
 
         Map<String, String> newSynonymsMap = new HashMap<>();
@@ -106,7 +124,7 @@ public class TrulyMostPopular {
      * @return a>b 1 a=b 0 a<b -1
      */
     public int compare(String a, String b) {
-        int size = a.length() > b.length() ? b.length() : a.length();
+        int size = Math.min(a.length(), b.length());
         for (int i = 0; i < size; i++) {
             char c1 = a.charAt(i);
             char c2 = b.charAt(i);
