@@ -1,4 +1,4 @@
-package com.company.JavaSourceLearn.algorithm2.lesson2;
+package com.company.JavaSourceLearn.algorithm2.lesson02;
 
 /**
  * @author : LiWenBo

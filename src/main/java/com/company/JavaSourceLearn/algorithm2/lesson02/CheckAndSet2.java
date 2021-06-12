@@ -1,6 +1,4 @@
-package com.company.JavaSourceLearn.algorithm2.lesson2;
-
-import org.junit.Before;
+package com.company.JavaSourceLearn.algorithm2.lesson02;
 
 /**
  * @author : LiWenBo
