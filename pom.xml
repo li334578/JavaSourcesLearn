@@ -96,6 +96,12 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
         </dependency>
+        <!--绘图工具包-->
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.0.19</version>
+        </dependency>
     </dependencies>
 
     <build>
