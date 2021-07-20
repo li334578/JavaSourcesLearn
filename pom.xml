@@ -113,7 +113,7 @@
             <artifactId>easyexcel</artifactId>
             <version>2.2.6</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>3.1.7</version>
