@@ -1,0 +1,6 @@
+redis:
+  node:
+    maxTotal: 10
+    host: localhost
+    port: 6379
+    password: root
