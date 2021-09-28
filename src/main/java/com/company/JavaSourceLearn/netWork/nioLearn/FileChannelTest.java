@@ -17,7 +17,7 @@ public class FileChannelTest {
     public static void main(String[] args) throws Exception {
         testMethod1();
         testMethod2();
-//        testMethod3();
+        testMethod3();
         testMethod4();
     }
 
