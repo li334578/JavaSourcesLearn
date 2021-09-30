@@ -35,6 +35,7 @@ public class FileChannelTest {
             while (byteBuffer.hasRemaining()) {
                 // 文件还有内容 char
                 System.out.println((char) byteBuffer.get());
+
             }
             // 清空缓冲区
             byteBuffer.clear();
