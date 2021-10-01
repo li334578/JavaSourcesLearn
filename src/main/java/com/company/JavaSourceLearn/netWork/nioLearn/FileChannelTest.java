@@ -33,7 +33,7 @@ public class FileChannelTest {
             // 转换为输出流
             byteBuffer.flip();
             while (byteBuffer.hasRemaining()) {
-                // 文件还有内容 char
+                // 文件还有内容
                 System.out.println((char) byteBuffer.get());
 
             }
