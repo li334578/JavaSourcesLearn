@@ -25,7 +25,6 @@ public class FileChannelTest {
         RandomAccessFile randomAccessFile = new RandomAccessFile("E:\\data\\1.txt", "rw");
         FileChannel channel = randomAccessFile.getChannel();
         // 分配bytebuffer的空间
-
         ByteBuffer byteBuffer = ByteBuffer.allocate(6);
         int read = channel.read(byteBuffer);
         // 读取到-1说明文件结束
