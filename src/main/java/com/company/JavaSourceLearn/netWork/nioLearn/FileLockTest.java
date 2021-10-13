@@ -29,6 +29,7 @@ public class FileLockTest {
         Path path = Paths.get(fp);
         FileChannel open = FileChannel.open(path, StandardOpenOption.WRITE, StandardOpenOption.APPEND);
         // lock 阻塞方法 当文件锁不可用时 当前线程会被挂起
+        System.out.println("lock test");
         // trylock 非阻塞方法 当文件锁不可用时 trylo+ck为共享锁
         FileLock fileLock = open.tryLock(0, Long.MAX_VALUE, false);
         System.out.println("共享锁" + fileLock.isShared());
