@@ -38,5 +38,6 @@ public class Example6 {
         System.out.println(list);
         System.out.println("--------------------");
         System.out.println(list2);
+        System.out.println(list2.size());
     }
 }
